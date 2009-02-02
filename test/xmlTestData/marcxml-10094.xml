@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record id="catkey_10094" xmlns="http://www.loc.gov/MARC21/slim">
+    <leader>00956cam  2200229   4500</leader>
+    <controlfield tag="001">a10094</controlfield>
+    <controlfield tag="005">19891011115630.0</controlfield>
+    <controlfield tag="008">721121s1953    nyua     b    000 0 eng</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">   53011621</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">(OCoLC-M)499920</subfield>
+    </datafield>
+    <datafield tag="040" ind1=" " ind2=" ">
+      <subfield code="a">DLC</subfield>
+      <subfield code="c">WSU</subfield>
+      <subfield code="d">SER</subfield>
+      <subfield code="d">m.c.</subfield>
+      <subfield code="d">OCL</subfield>
+      <subfield code="d">STF</subfield>
+      <subfield code="d">OrLoB</subfield>
+    </datafield>
+    <datafield tag="049" ind1=" " ind2=" ">
+      <subfield code="a">STFA</subfield>
+      <subfield code="c">1-2</subfield>
+    </datafield>
+    <datafield tag="050" ind1="0" ind2=" ">
+      <subfield code="a">JK1061</subfield>
+      <subfield code="b">.G32</subfield>
+    </datafield>
+    <datafield tag="082" ind1=" " ind2=" ">
+      <subfield code="a">328.73</subfield>
+    </datafield>
+    <datafield tag="092" ind1=" " ind2=" ">
+      <subfield code="a">328.73</subfield>
+      <subfield code="b">G174L</subfield>
+    </datafield>
+    <datafield tag="100" ind1="1" ind2=" ">
+      <subfield code="a">Galloway, George B.</subfield>
+      <subfield code="q">(George Barnes),</subfield>
+      <subfield code="d">1898-1967.</subfield>
+    </datafield>
+    <datafield tag="245" ind1="1" ind2="4">
+      <subfield code="a">The legislative process in Congress.</subfield>
+    </datafield>
+    <datafield tag="260" ind1=" " ind2=" ">
+      <subfield code="a">New York,</subfield>
+      <subfield code="b">Crowell,</subfield>
+      <subfield code="c">1953.</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">xii, 689 p.</subfield>
+      <subfield code="b">2 diagrs. (on lining paper)</subfield>
+      <subfield code="c">22 cm.</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">"In a sense ... a successsor to, rather than a revision of," the author's Congress at the crossroads.</subfield>
+    </datafield>
+    <datafield tag="504" ind1=" " ind2=" ">
+      <subfield code="a">Includes bibliographies.</subfield>
+    </datafield>
+    <datafield tag="596" ind1=" " ind2=" ">
+      <subfield code="a">20</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2="0">
+      <subfield code="a">United States.</subfield>
+      <subfield code="b">Congress.</subfield>
+    </datafield>
+    <datafield tag="650" ind1=" " ind2="0">
+      <subfield code="a">Legislation</subfield>
+      <subfield code="z">United States.</subfield>
+    </datafield>
+    <datafield tag="650" ind1=" " ind2="0">
+      <subfield code="a">Legislative power</subfield>
+      <subfield code="z">United States.</subfield>
+    </datafield>
+    <datafield tag="910" ind1=" " ind2=" ">
+      <subfield code="a">rcp4</subfield>
+    </datafield>
+  </record>
