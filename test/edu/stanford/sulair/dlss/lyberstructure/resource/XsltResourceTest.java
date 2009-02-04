@@ -1,14 +1,18 @@
 package edu.stanford.sulair.dlss.lyberstructure.resource;
 
-import java.io.*;
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 
+import org.custommonkey.xmlunit.Diff;
+import org.junit.Assert;
 import org.junit.Test;
-import org.xml.sax.SAXException; 
-// http://xmlunit.sourceforge.net
-// http://www.infoq.com/articles/xml-unit-test
-// http://www.ibm.com/developerworks/java/library/j-cq121906.html
-import org.custommonkey.xmlunit.*;
+import org.xml.sax.SAXException;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -18,41 +22,38 @@ import edu.stanford.sulair.dlss.lyberstructure.AbstractHttpServerTester;
 
 public class XsltResourceTest extends AbstractHttpServerTester {
 
-	public XsltResourceTest(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+
 
 	@Test
 	public void testMarc2Mods() throws IOException, SAXException {
-		File marcxmlFile = new File("test/xslt-testdata/marcxml-10094.xml");
+		File marcxmlFile = new File("test/xmlTestData/marcxml-10094.xml");
 		String marcxmlData = readToString(marcxmlFile, "UTF-8");
-		File modsFile = new File("test/xslt-testdata/mods-10094.xml");
+		File modsFile = new File("test/xmlTestData/mods-10094.xml");
 		String modsExpected = readToString(modsFile, "UTF-8");
 		startServer(XsltResource.class);
 		WebResource objResource = Client.create().resource(getUri().path("xslt/marc2mods").build());
 		ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(
 				ClientResponse.class);
-		assertEquals(200, r.getStatus());
+		Assert.assertEquals(200, r.getStatus());
 		String modsReturned = r.getEntity(String.class);
 		Diff xmlDiff = new Diff(modsExpected, modsReturned);
-		assertTrue(xmlDiff.identical());
+		Assert.assertTrue(xmlDiff.identical());
 	}
 
 	@Test
 	public void testMods2Dc() throws IOException, SAXException {
-		File modsFile = new File("test/xslt-testdata/mods-10094.xml");
+		File modsFile = new File("test/xmlTestData/mods-10094.xml");
 		String modsData = readToString(modsFile, "UTF-8");
-		File dcFile = new File("test/xslt-testdata/dc-10094.xml");
+		File dcFile = new File("test/xmlTestData/dc-10094.xml");
 		String dcExpected = readToString(dcFile, "UTF-8");
 		startServer(XsltResource.class);
 		WebResource objResource = Client.create().resource(getUri().path("xslt/mods2dc").build());
 		ClientResponse r = objResource.entity(modsData, "application/xml").post(
 				ClientResponse.class);
-		assertEquals(200, r.getStatus());
+		Assert.assertEquals(200, r.getStatus());
 		String dcReturned = r.getEntity(String.class);
 		Diff xmlDiff = new Diff(dcExpected, dcReturned);
-		assertTrue(xmlDiff.identical());
+		Assert.assertTrue(xmlDiff.identical());
 	}
 
 	/**

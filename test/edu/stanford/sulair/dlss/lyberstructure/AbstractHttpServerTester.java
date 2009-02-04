@@ -41,7 +41,7 @@ import java.net.URI;
 
 import javax.ws.rs.core.UriBuilder;
 
-import junit.framework.TestCase;
+import org.junit.After;
 
 import com.sun.jersey.api.container.ContainerFactory;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
@@ -53,15 +53,12 @@ import com.sun.net.httpserver.HttpServer;
  *
  * @author Paul.Sandoz@Sun.Com
  */
-public abstract class AbstractHttpServerTester extends TestCase {
+public abstract class AbstractHttpServerTester{
 
     public static final String CONTEXT = "/context";
     private HttpServer server;
     private int port = TestHelper.getEnvVariable("JERSEY_HTTP_PORT", 9998);
 
-    public AbstractHttpServerTester(String name) {
-        super(name);
-    }
 
     public UriBuilder getUri() {
         return UriBuilder.fromUri("http://localhost").port(port).path(CONTEXT);
@@ -98,7 +95,7 @@ public abstract class AbstractHttpServerTester extends TestCase {
         server.start();
         System.out.println("Started HttpServer");
 
-        int timeToSleep = TestHelper.getEnvVariable("JERSEY_HTTP_SLEEP", 0);
+        int timeToSleep = TestHelper.getEnvVariable("JERSEY_HTTP_SLEEP", 1000);
         if (timeToSleep > 0) {
             System.out.println("Sleeping for " + timeToSleep + " ms");
             try {
@@ -113,12 +110,12 @@ public abstract class AbstractHttpServerTester extends TestCase {
     public void stopServer() {
         if (server != null) {
             System.out.println("Stopping HttpServer port number = " + server.getAddress().getPort());
-            server.stop(TestHelper.getEnvVariable("JERSEY_HTTP_STOPSEC", 0));
+            server.stop(TestHelper.getEnvVariable("JERSEY_HTTP_STOPSEC", 1));
             System.out.println("Stopped HttpServer");
         }
     }
 
-    @Override
+    @After
     public void tearDown() {
         stopServer();
     }
