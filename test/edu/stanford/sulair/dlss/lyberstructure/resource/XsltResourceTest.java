@@ -41,6 +41,22 @@ public class XsltResourceTest extends AbstractHttpServerTester {
 	}
 
 	@Test
+	public void testMarc2ModsUnicode() throws IOException, SAXException {
+		File marcxmlFile = new File("test/xmlTestData/marcxml-6272783.xml");
+		String marcxmlData = readToString(marcxmlFile, "UTF-8");
+		File modsFile = new File("test/xmlTestData/mods-6272783.xml");
+		String modsExpected = readToString(modsFile, "UTF-8");
+		startServer(XsltResource.class);
+		WebResource objResource = Client.create().resource(getUri().path("xslt/marc2mods").build());
+		ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(
+				ClientResponse.class);
+		Assert.assertEquals(200, r.getStatus());
+		String modsReturned = r.getEntity(String.class);
+		Diff xmlDiff = new Diff(modsExpected, modsReturned);
+		Assert.assertTrue(xmlDiff.identical());
+	}
+
+	@Test
 	public void testMods2Dc() throws IOException, SAXException {
 		File modsFile = new File("test/xmlTestData/mods-10094.xml");
 		String modsData = readToString(modsFile, "UTF-8");

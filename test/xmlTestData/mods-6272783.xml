@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://www.loc.gov/mods/v3"
+      version="3.3"
+      xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+   <titleInfo>
+      <title>Gândurile și tristețile unui rus lipovean</title>
+   </titleInfo>
+   <titleInfo type="alternative">
+      <title>Nevesëlye razmyshlenii͡a russkogo-lipovanina</title>
+   </titleInfo>
+   <name type="personal">
+      <namePart>Evseev, Ivan.</namePart>
+      <role>
+         <roleTerm authority="marcrelator" type="text">creator</roleTerm>
+      </role>
+   </name>
+   <name type="personal">
+      <namePart>Denis-Condrat, Anișoara.</namePart>
+   </name>
+   <typeOfResource>text</typeOfResource>
+   <genre authority="marcgt">bibliography</genre>
+   <originInfo>
+      <place>
+         <placeTerm type="code" authority="marccountry">rm</placeTerm>
+      </place>
+      <place>
+         <placeTerm type="text">București</placeTerm>
+      </place>
+      <publisher>Editura C.R.L.R.</publisher>
+      <dateIssued>2005</dateIssued>
+      <dateIssued encoding="marc" keyDate="yes">2005</dateIssued>
+      <issuance>monographic</issuance>
+   </originInfo>
+   <language>
+      <languageTerm authority="iso639-2b" type="code">rum</languageTerm>
+   </language>
+   <language>
+      <languageTerm authority="iso639-2b" type="code">rus</languageTerm>
+   </language>
+   <physicalDescription>
+      <form authority="marcform">print</form>
+      <extent>427 p. : port. ; 24 cm.</extent>
+   </physicalDescription>
+   <note displayLabel="statement of responsibility">Ivan Evseev ; volum îngrijit de Anișoara Denis-Condrat.</note>
+   <subject authority="lcsh">
+      <topic>Romanian language</topic>
+      <topic>History and criticism</topic>
+   </subject>
+   <subject authority="lcsh">
+      <topic>Romanian literature</topic>
+      <topic>History and criticism</topic>
+   </subject>
+   <subject authority="lcsh">
+      <geographic>Romania</geographic>
+      <topic>Politics and government</topic>
+   </subject>
+   <classification authority="lcc">PC625 .E984 2005</classification>
+   <identifier type="isbn">9738741807</identifier>
+   <identifier type="isbn">9789738741805</identifier>
+   <identifier type="lccn">2006467796</identifier>
+   <recordInfo>
+      <descriptionStandard>aacr2</descriptionStandard>
+      <recordContentSource authority="marcorg">CGU</recordContentSource>
+      <recordCreationDate encoding="marc">060411</recordCreationDate>
+      <recordIdentifier>a6272783</recordIdentifier>
+   </recordInfo>
+</mods>
