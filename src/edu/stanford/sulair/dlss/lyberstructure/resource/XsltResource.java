@@ -3,6 +3,7 @@ package edu.stanford.sulair.dlss.lyberstructure.resource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -36,7 +37,7 @@ import java.io.*;
 
 import edu.stanford.sulair.dlss.lyberstructure.*;
 
-@Path("xslt")
+@Path("/")
 public class XsltResource {
 	@Context
 	UriInfo uriInfo;
@@ -51,6 +52,7 @@ public class XsltResource {
 	@Path("marc2mods")
 	@POST
 	@Consumes("application/xml")
+	@Produces("application/xml")
 	public Response doMarc2ModsTransform(String marc) {
 		String mods;
 		try {
@@ -72,6 +74,7 @@ public class XsltResource {
 	@Path("mods2dc")
 	@POST
 	@Consumes("application/xml")
+	@Produces("application/xml")
 	public Response doMods2DcTransform(String mods) {
 		String dc;
 		try {

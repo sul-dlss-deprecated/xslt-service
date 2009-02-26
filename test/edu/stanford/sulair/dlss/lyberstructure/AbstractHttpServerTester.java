@@ -112,6 +112,16 @@ public abstract class AbstractHttpServerTester{
             System.out.println("Stopping HttpServer port number = " + server.getAddress().getPort());
             server.stop(TestHelper.getEnvVariable("JERSEY_HTTP_STOPSEC", 1));
             System.out.println("Stopped HttpServer");
+            int timeToSleep = TestHelper.getEnvVariable("JERSEY_HTTP_SLEEP", 3000);
+            if (timeToSleep > 0) {
+                System.out.println("Sleeping after stopping for " + timeToSleep + " ms");
+                try {
+                    // Wait for the server to start
+                    Thread.sleep(timeToSleep);
+                } catch (InterruptedException ex) {
+                    System.out.println("Sleeping interrupted: " + ex.getLocalizedMessage());
+                }
+            }
         }
     }
 
