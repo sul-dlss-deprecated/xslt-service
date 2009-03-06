@@ -92,7 +92,51 @@ public class XsltResource {
 		//Send xml response to client
 		return Response.status(200).entity(dc).build();
 	}
-
+	
+	@Path("dor2contentmap")
+	@POST
+	@Consumes("application/xml")
+	@Produces("application/xml")
+	public Response doDor2ContentMapTransform(String objMd) {
+		String dc;
+		try {
+			String xsltURL="http://cosimo.stanford.edu/services/dor-transforms/ContentMapfromDorMetadata.xsl";
+			dc=runTransform(xsltURL,objMd);
+			
+		} catch (Exception e) {
+			//Handle any errors
+			LOG.error(e);
+			return ResourceUtilities.createErrorResponse(e);
+		}
+		
+		LOG.info("helpful log message");
+		
+		//Send xml response to client
+		return Response.status(200).entity(dc).build();
+	}
+	
+	@Path("dor2tm")
+	@POST
+	@Consumes("application/xml")
+	@Produces("application/xml")
+	public Response doDor2TmTransform(String objMd) {
+		String dc;
+		try {
+			String xsltURL="http://cosimo.stanford.edu/services/dor-transforms/TMfromDorMetadata.xsl";
+			dc=runTransform(xsltURL,objMd);
+			
+		} catch (Exception e) {
+			//Handle any errors
+			LOG.error(e);
+			return ResourceUtilities.createErrorResponse(e);
+		}
+		
+		LOG.info("helpful log message");
+		
+		//Send xml response to client
+		return Response.status(200).entity(dc).build();
+	}	
+	
 	private String runTransform (String xsltURL, String inputXml) throws SaxonApiException {
 		// http://www.saxonica.com/documentation/javadoc/net/sf/saxon/s9api/package-summary.html
 		// http://www.saxonica.com/download/S9APIExamples.java
