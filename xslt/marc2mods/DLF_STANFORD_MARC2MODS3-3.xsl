@@ -5,6 +5,11 @@
 	<xsl:output encoding="UTF-8" indent="yes" method="xml"/>
 	<!--
 
+REVISIONS made by Stanford University 
+
+Stanford revision 1.1 - Merged LOC MODS 3.3 enhancements into this transform  2008/10/13  rnanders@stanford.edu
+
+
 REVISIONS made by DLF/AQUIFER Metadata Working Group (MWG)
 These revisions are based on the MWG's interpretation of the DLF/Aquifer Implementation Guidelines for Shareable MODS Records, November 2006
 
@@ -64,17 +69,17 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 		<xsl:choose>
 			<xsl:when test="//marc:collection">
 				<modsCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-					xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-2.xsd">
+					xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
 					<xsl:for-each select="//marc:collection/marc:record">
-						<mods version="3.2">
+						<mods version="3.3">
 							<xsl:call-template name="marcRecord"/>
 						</mods>
 					</xsl:for-each>
 				</modsCollection>
 			</xsl:when>
 			<xsl:otherwise>
-				<mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.2"
-					xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-2.xsd">
+				<mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3"
+					xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
 					<xsl:for-each select="//marc:record">
 						<xsl:call-template name="marcRecord"/>
 					</xsl:for-each>
@@ -505,6 +510,9 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 			<xsl:if test="substring($controlField008,25,1)='j'">
 				<genre authority="marcgt">patent</genre>
 			</xsl:if>
+			<xsl:if test="substring($controlField008,25,1)='2'">
+				<genre authority="marcgt">offprint</genre>
+			</xsl:if>
 			<xsl:if test="substring($controlField008,31,1)='1'">
 				<genre authority="marcgt">festschrift</genre>
 			</xsl:if>
@@ -652,6 +660,20 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 				</xsl:when>
 			</xsl:choose>
 		</xsl:if>
+
+		<!-- 1.20 047 genre tmee-->
+
+		<xsl:for-each select="marc:datafield[@tag=047]">
+			<genre authority="marcgt">
+				<xsl:attribute name="authority">
+					<xsl:value-of select="marc:subfield[@code='2']"/>
+				</xsl:attribute>
+				<xsl:call-template name="subfieldSelect">
+					<xsl:with-param name="codes">abcdef</xsl:with-param>
+					<xsl:with-param name="delimeter">-</xsl:with-param>
+				</xsl:call-template>
+			</genre>
+		</xsl:for-each>
 		<xsl:for-each select="marc:datafield[@tag=655]">
 			<genre authority="marcgt">
 				<xsl:attribute name="authority">
@@ -1611,6 +1633,20 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 							</xsl:call-template>
 						</city>
 					</xsl:for-each>
+
+
+
+
+
+
+
+					<xsl:for-each select="marc:subfield[@code='e']">
+						<citySection>
+							<xsl:call-template name="chopPunctuation">
+								<xsl:with-param name="chopString" select="."/>
+							</xsl:call-template>
+						</citySection>
+					</xsl:for-each>
 					<xsl:for-each select="marc:subfield[@code='f']">
 						<citySection>
 							<xsl:call-template name="chopPunctuation">
@@ -2170,12 +2206,22 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 			</identifier>
 		</xsl:for-each>
 		<xsl:for-each select="marc:datafield[@tag='022']">
+			<xsl:if test="marc:subfield[@code='a']">
 			<xsl:call-template name="isInvalid">
 				<xsl:with-param name="type">issn</xsl:with-param>
 			</xsl:call-template>
 			<identifier type="issn">
 				<xsl:value-of select="marc:subfield[@code='a']"/>
 			</identifier>
+			</xsl:if>
+			<xsl:if test="marc:subfield[@code='l']">
+				<xsl:call-template name="isInvalid">
+					<xsl:with-param name="type">issn-l</xsl:with-param>
+				</xsl:call-template>
+				<identifier type="issn-l">
+					<xsl:value-of select="marc:subfield[@code='l']"/>
+				</identifier>
+			</xsl:if>
 		</xsl:for-each>
 		<xsl:for-each select="marc:datafield[@tag='010']">
 			<xsl:call-template name="isInvalid">
@@ -2318,14 +2364,34 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 
 		<!-- 3.2 change tmee 856z  -->
 
+		<!-- 1.24  tmee  -->
 		<xsl:for-each select="marc:datafield[@tag=852]">
 			<location>
+				<xsl:if test="marc:subfield[@code='a' or @code='b' or @code='e' or @code='j' ]">
 				<physicalLocation>
 					<xsl:call-template name="displayLabel"/>
 					<xsl:call-template name="subfieldSelect">
 						<xsl:with-param name="codes">abje</xsl:with-param>
 					</xsl:call-template>
 				</physicalLocation>
+				</xsl:if>
+				<xsl:if test="marc:subfield[@code='u']">
+					<physicalLocation>
+						<xsl:call-template name="uri"/>
+						<xsl:call-template name="subfieldSelect">
+							<xsl:with-param name="codes">u</xsl:with-param>
+						</xsl:call-template>
+					</physicalLocation>
+				</xsl:if>
+
+				<xsl:if
+					test="marc:subfield[@code='h' or @code='i' or @code='j' or @code='k' or @code='l' or @code='m' or @code='t']">
+					<shelfLocation>
+						<xsl:call-template name="subfieldSelect">
+							<xsl:with-param name="codes">hijklmt</xsl:with-param>
+						</xsl:call-template>
+					</shelfLocation>
+				</xsl:if>
 			</location>
 		</xsl:for-each>
 		<xsl:for-each select="marc:datafield[@tag=506]">
@@ -2343,7 +2409,19 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 			</accessCondition>
 		</xsl:for-each>
 		<recordInfo>
+			<!-- 1.25  tmee-->
+
+
+			<xsl:for-each select="marc:leader[substring($leader,19,1)='a']">
+				<descriptionStandard>aacr2</descriptionStandard>
+			</xsl:for-each>
+
 			<xsl:for-each select="marc:datafield[@tag=040]">
+				<xsl:if test="marc:subfield[@code='e']">
+					<descriptionStandard>
+						<xsl:value-of select="marc:subfield[@code='e']"/>
+					</descriptionStandard>
+				</xsl:if>
 				<recordContentSource authority="marcorg">
 					<xsl:value-of select="marc:subfield[@code='a']"/>
 				</recordContentSource>
@@ -2392,7 +2470,7 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 		</xsl:for-each>
 	</xsl:template>
 	<xsl:template name="uri">
-		<xsl:for-each select="marc:subfield[@code='u']">
+		<xsl:for-each select="marc:subfield[@code='u']|marc:subfield[@code='0']">
 			<xsl:attribute name="xlink:href">
 				<xsl:value-of select="."/>
 			</xsl:attribute>
@@ -2974,7 +3052,8 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 	</xsl:template>
 	<xsl:template name="isInvalid">
 		<xsl:param name="type"/>
-		<xsl:if test="marc:subfield[@code='z'] or marc:subfield[@code='y']">
+		<xsl:if
+			test="marc:subfield[@code='z'] or marc:subfield[@code='y']  or marc:subfield[@code='m']">
 			<identifier>
 				<xsl:attribute name="type">
 					<xsl:value-of select="$type"/>
@@ -2987,6 +3066,9 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 				</xsl:if>
 				<xsl:if test="marc:subfield[@code='y']">
 					<xsl:value-of select="marc:subfield[@code='y']"/>
+				</xsl:if>
+				<xsl:if test="marc:subfield[@code='m']">
+					<xsl:value-of select="marc:subfield[@code='m']"/>
 				</xsl:if>
 			</identifier>
 		</xsl:if>
