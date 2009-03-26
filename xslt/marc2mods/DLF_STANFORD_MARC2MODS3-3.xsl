@@ -7,6 +7,7 @@
 
 REVISIONS made by Stanford University 
 
+Stanford revision 1.2 - Revised to include LOC revision 1.25 to 1.27 changes
 Stanford revision 1.1 - Merged LOC MODS 3.3 enhancements into this transform  2008/10/13  rnanders@stanford.edu
 
 
@@ -2970,6 +2971,30 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 				<xsl:call-template name="part"/>
 			</titleInfo>
 			<xsl:call-template name="subjectAnyOrder"/>
+		</subject>
+	</xsl:template>
+	<!-- 1.27 648 tmee-->
+	<xsl:template match="marc:datafield[@tag=648]">
+		<subject>
+			<xsl:if test="marc:subfield[@code=2]">
+				<xsl:attribute name="authority">
+					<xsl:value-of select="marc:subfield[@code=2]"/>
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:call-template name="uri"/>
+
+			<xsl:call-template name="subjectAuthority"/>
+			<temporal>
+				<xsl:call-template name="chopPunctuation">
+					<xsl:with-param name="chopString">
+						<xsl:call-template name="subfieldSelect">
+							<xsl:with-param name="codes">abcd</xsl:with-param>
+						</xsl:call-template>
+					</xsl:with-param>
+				</xsl:call-template>
+			</temporal>
+			<xsl:call-template name="subjectAnyOrder"/>
+
 		</subject>
 	</xsl:template>
 	<xsl:template match="marc:datafield[@tag=650]">
