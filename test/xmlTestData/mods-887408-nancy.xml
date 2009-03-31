@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods:mods version="3.3" ID="a:b">
+	<mods:titleInfo>
+		<mods:nonSort>The </mods:nonSort>
+		<mods:title>winter's tale</mods:title>
+	</mods:titleInfo>
+	<mods:name type="personal">
+		<mods:namePart>Shakespeare, William</mods:namePart>
+		<mods:namePart type="date">1564-1616</mods:namePart>
+		<mods:role>
+			<mods:roleTerm authority="marcrelator" type="text">creator</mods:roleTerm>
+		</mods:role>
+	</mods:name>
+	<mods:name type="personal">
+		<mods:namePart>Armfield, Maxwell</mods:namePart>
+		<mods:namePart type="date">1862-</mods:namePart>
+	</mods:name>
+	<mods:typeOfResource>text</mods:typeOfResource>
+	<mods:originInfo>
+		<mods:place>
+			<mods:placeTerm authority="marccountry" type="code">enk</mods:placeTerm>
+		</mods:place>
+		<mods:place>
+			<mods:placeTerm type="text">London</mods:placeTerm>
+		</mods:place>
+		<mods:place>
+			<mods:placeTerm type="text">New York</mods:placeTerm>
+		</mods:place>
+		<mods:publisher>J. M. Dent</mods:publisher>
+		<mods:publisher>E. P. Dutton</mods:publisher>
+		<mods:dateIssued>[1922?]</mods:dateIssued>
+		<mods:dateIssued encoding="marc" keyDate="yes">1922</mods:dateIssued>
+		<mods:issuance>monographic</mods:issuance>
+	</mods:originInfo>
+	<mods:language>
+		<mods:languageTerm authority="iso639-2b" type="code">eng</mods:languageTerm>
+	</mods:language>
+	<mods:relatedItem type="original">
+		<mods:physicalDescription>
+			<mods:form authority="marcform">print</mods:form>
+			<mods:extent>98 p., [12] leaves of plates : col. ill. ; 29
+				cm.</mods:extent>
+		</mods:physicalDescription>
+		<mods:recordInfo>
+			<mods:recordChangeDate encoding="iso8601">19910715000000.0</mods:recordChangeDate>
+			<mods:recordCreationDate encoding="marc">760521</mods:recordCreationDate>
+			<mods:recordContentSource authority="marcorg">MiU</mods:recordContentSource>
+			<mods:recordIdentifier source="SU Library catalog key">887408</mods:recordIdentifier>
+			<!-- I think we should explicitly pull out the value in the MARC 035 field with subfield a having a value of oclc at least, if not all the values.  Oher examples of values in this field would be ISBN, ISSN although they would map to mods:identifier rather than mods:recordIdentifier.  They should all appear within this relatedItem of type Original section. -->
+			<mods:recordIdentifier source="oclc">3794399</mods:recordIdentifier>
+		</mods:recordInfo>
+	</mods:relatedItem>
+	<mods:physicalDescription>
+		<mods:form authority="marcform">electronic</mods:form>
+		<mods:reformattingQuality>preservation</mods:reformattingQuality>
+		<mods:internetMediaType>image/jp2</mods:internetMediaType>
+		<mods:internetMediaType>image/tif</mods:internetMediaType>
+		<mods:internetMediaType>text/plain</mods:internetMediaType>
+		<mods:internetMediaType>application/pdf</mods:internetMediaType>
+		<mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+	</mods:physicalDescription>
+	<mods:note displayLabel="statement of responsibility">Shakespeare ; with
+		coloured picturs painted in tempera by Maxwell Armfield.</mods:note>
+	<mods:recordInfo>
+		<mods:recordContentSource>SDR Transformation</mods:recordContentSource>
+		<mods:recordCreationDate encoding="iso8601">2008-10-22T12:15:20-07:00</mods:recordCreationDate>
+		<mods:recordIdentifier source="Data Provider Digital Object Identifier">1234</mods:recordIdentifier>
+	</mods:recordInfo>
+	<mods:accessCondition displayLabel="Copyright Stanford University. Stanford, CA 94305. (650) 723-2300." type="useAndReproduction"
+		>Stanford University Libraries and Academic
+		Information Resources - Terms of Use SULAIR Web sites are subject to
+		Stanford University's standard Terms of Use (See
+		http://www.stanford.edu/home/atoz/terms.html) These terms include a limited
+		personal, non-exclusive, non-transferable license to access and use the
+		sites, and to download - where permitted - material for personal,
+		non-commercial, non-display use only. Please contact the University
+		Librarian to request permission to use SULAIR Web sites and contents beyond
+		the scope of the above license, including but not limited to republication
+		to a group or republishing the Web site or parts of the Web site. SULAIR
+		provides access to a variety of external databases and resources, which
+		sites are governed by their own Terms of Use, as well as contractual access
+		restrictions. The Terms of Use on these external sites always govern the
+		data available there. Please consult with library staff if you have
+		questions about data access and availability.</mods:accessCondition>
+	<mods:identifier displayLabel="SUL_DRUID" type="local">9999</mods:identifier>
+	<mods:location>
+		<mods:physicalLocation>Stanford University Libraries</mods:physicalLocation>
+		<mods:url>sul.stanford.edu/9999</mods:url>
+	</mods:location>
+</mods:mods>

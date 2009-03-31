@@ -24,7 +24,28 @@ import edu.stanford.sulair.dlss.lyberstructure.AbstractHttpServerTester;
 
 public class XsltResourceTest extends AbstractHttpServerTester {
 
-
+	@Test
+	public void marc2ModsDor() throws IOException, SAXException {
+		File marcxmlFile = new File("test/xmlTestData/marcxml-887408.xml");
+		String marcxmlData = readToString(marcxmlFile, "UTF-8");
+		File modsFile = new File("test/xmlTestData/mods-887408.xml");
+		String modsExpected = readToString(modsFile, "UTF-8");
+		startServer(XsltResource.class);
+		WebResource objResource = Client.create().resource(getUri().path("dor_marc2mods")
+				.queryParam("catkey", "887408")
+				.queryParam("barcode", "36105036457831")
+				.queryParam("druid", "dr:xxxxxxxxxxx")
+				.queryParam("test", "true")
+				.build());
+		ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(
+				ClientResponse.class);
+		Assert.assertEquals(200, r.getStatus());
+		Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
+		String modsReturned = r.getEntity(String.class);
+		Diff xmlDiff = new Diff(modsExpected, modsReturned);
+		Assert.assertTrue(xmlDiff.identical());
+	}
+	
 
 	@Test
 	public void marc2Mods() throws IOException, SAXException {
