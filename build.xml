@@ -2,7 +2,7 @@
 
 <project name="transform" basedir="." default="all">
 
-	<property name="transform" value="catalog"/>
+	<property name="name" value="transform"/>
 
 	<property name="war.dir" value="WebContent"/>
 	<property name="src.dir" value="src"/>
