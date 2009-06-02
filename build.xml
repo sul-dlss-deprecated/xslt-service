@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+
+<project name="transform" basedir="." default="all">
+
+	<property name="transform" value="catalog"/>
+
+	<property name="war.dir" value="WebContent"/>
+	<property name="src.dir" value="src"/>
+	<property name="build.dir" value="build"/>
+	<property name="webclasses.dir" value="${war.dir}/WEB-INF/classes"/>
+	<property name="weblib.dir" value="${war.dir}/WEB-INF/lib"/>
+	<property name="dist.dir" value="dist"/>
+	<property name="props.dir" value="properties"/>
+
+
+	<property name="testsrc.dir" value="test"/>
+	<property name="testbuild.dir" value="test-build"/>
+	<property name="testlib.dir" value="lib-test"/>
+	<property name="testreports.dir" value="junit-reports"/>
+	<property name="testhtml.dir" value="${testreports.dir}/html"/>
+
+	
+	<path id="classpath">
+		<fileset dir="${weblib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="test-classpath">
+		<fileset dir="${testlib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="clean" description="Clean output dirs (build, docs, testbuild, testreports, weblib, dist)">
+		<delete dir="${build.dir}"/>
+		<delete file="${weblib.dir}/${name}.jar"/>
+		<delete dir="${testbuild.dir}"/>
+		<delete dir="${testreports.dir}"/>
+		<delete dir="${dist.dir}"/>
+		<delete dir="${webclasses.dir}"/>
+	</target>
+
+	<target name="build" description="Compile main source tree java files into class files, generate jar files">
+
+		<mkdir dir="${build.dir}"/>
+
+		<javac destdir="${build.dir}" source="1.5" target="1.5"
+				debug="true" deprecation="false" optimize="false" failonerror="true">
+			<src path="${src.dir}"/>
+			<classpath refid="classpath"/>
+		</javac>
+		
+	</target>
+	
+	<!--War building targets -->
+	
+	<target name="build-jar">
+
+		<mkdir dir="${dist.dir}"/>
+		
+		<jar jarfile="${weblib.dir}/${name}.jar" compress="true">
+			<fileset dir="${build.dir}">
+				<include name="**/*"/>
+			</fileset>
+		</jar>
+	
+	</target>
+		
+	<!-- only need one war at the moment -->
+	<!--
+	<target name="dev-war" if="create-wars" >
+		<echo message="Writing dev properties" />
+		<copy file="${props.dir}/dev-marc2xml.conf" tofile="${war.dir}/WEB-INF/marc2xml.conf" overwrite="true" />
+		
+		<war warfile="${dist.dir}/${name}-dev.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
+			<include name="*"/>
+			<include name="WEB-INF/*.*"/>
+			<exclude name="WEB-INF/web.xml"/>
+			<include name="WEB-INF/lib/**"/>
+			<include name="WEB-INF/classes/**"/>
+			<include name="META-INF/*"/>
+			<exclude name="**/.*"/>
+		</war>
+	</target>
+	-->
+	<!--
+	<target name="test-war" if="create-wars" >
+		<echo message="Writing test properties" />
+		<copy file="${props.dir}/test-marc2xml.conf" tofile="${war.dir}/WEB-INF/marc2xml.conf" overwrite="true" />
+		
+		<war warfile="${dist.dir}/${name}-test.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
+			<include name="*"/>
+			<include name="WEB-INF/*.*"/>
+			<exclude name="WEB-INF/web.xml"/>
+			<include name="WEB-INF/lib/**"/>
+			<include name="WEB-INF/classes/**"/>
+			<include name="META-INF/*"/>
+			<exclude name="**/.*"/>
+		</war>
+	</target>
+    -->
+	
+	<target name="prod-war" if="create-wars" >		
+		<war warfile="${dist.dir}/${name}-prod.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
+			<include name="*"/>
+			<include name="WEB-INF/*.*"/>
+			<exclude name="WEB-INF/web.xml"/>
+			<include name="WEB-INF/lib/**"/>
+			<include name="WEB-INF/classes/**"/>
+			<include name="META-INF/*"/>
+			<exclude name="**/.*"/>
+		</war>
+	</target>
+	
+	<target name="build-wars" depends="prod-war" />
+		
+	<!--Target for hudson
+	    create-wars should be passed in as a property to the ant script to build all oracle wars-->
+	<target name="warfiles" depends="clean,build,tests,build-jar,build-wars" description="Build the web application archive">
+		<delete file="${weblib.dir}/${name}.jar" />
+	</target>
+	
+	<target name="tests" depends="clean,build" description="Run tests">
+
+		<delete dir="${testbuild.dir}"/>
+		<mkdir dir="${testbuild.dir}"/>
+		
+		<delete dir="${testreports.dir}"/>
+		<mkdir dir="${testreports.dir}"/>
+		<delete dir="${testhtml.dir}"/>
+		<mkdir dir="${testhtml.dir}"/>
+		
+
+		<javac srcdir="${testsrc.dir}" destdir="${testbuild.dir}" debug="true" deprecation="true">
+			<classpath path="${build.dir}"/>
+			<classpath refid="classpath"/>
+			<classpath refid="test-classpath"/>
+		</javac>
+
+		<copy todir="${testbuild.dir}" preservelastmodified="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.xml"/>
+				<include name="**/*.properties"/>
+			</fileset>
+			<fileset dir="${testsrc.dir}">
+				<include name="**/*.xml"/>
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+
+		
+		<junit forkmode="perBatch" printsummary="true" haltonfailure="yes" haltonerror="yes">
+			<classpath path="${build.dir}"/>
+			<classpath path="${testbuild.dir}"/>
+			<classpath refid="classpath"/>
+			<classpath refid="test-classpath"/>
+
+			
+			<formatter type="xml"/>
+
+			<batchtest fork="yes" todir="${testreports.dir}">
+				<fileset dir="${testbuild.dir}">
+					<include name="**/*Tests.class"/>
+					<exclude name="**/Abstract*Tests.class"/>
+					<exclude name="**/*SuiteTests.class"/>
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<junitreport todir="${testhtml.dir}">
+			<fileset dir="${testreports.dir}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${testhtml.dir}"/>
+		</junitreport>
+	</target>
+	
+	<target name="all" depends="clean,build,tests" />
+
+</project>

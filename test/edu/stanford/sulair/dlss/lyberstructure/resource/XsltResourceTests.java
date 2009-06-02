@@ -22,7 +22,7 @@ import com.sun.jersey.api.client.WebResource;
 
 import edu.stanford.sulair.dlss.lyberstructure.AbstractHttpServerTester;
 
-public class XsltResourceTest extends AbstractHttpServerTester {
+public class XsltResourceTests extends AbstractHttpServerTester {
 
 	@Test
 	public void marc2ModsDor() throws IOException, SAXException {
