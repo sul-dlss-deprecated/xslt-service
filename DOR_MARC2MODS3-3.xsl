@@ -17,7 +17,7 @@
 	<!-- Get the catkey from a Param or from the "id" attribute of the input root element -->
 	<xsl:variable name="ckey">
 			<xsl:if test="contains(marc:record/@id,'catkey_')">
-				<xsl:value-of select="substring-after(marc:record/@id,'_')"/>
+				<xsl:value-of select="substring-after(marc:record/@id,'_a')"/>
 			</xsl:if>
 	</xsl:variable>
 
@@ -30,7 +30,7 @@
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
 
 	<!-- Output will contain this authorship information -->
-	<xsl:variable name="thisXSLT">DOR_MARC2MODS3-3.xsl Revision 1.0</xsl:variable>
+	<xsl:variable name="thisXSLT">DOR_MARC2MODS3-3.xsl Revision 1.1</xsl:variable>
 	
 	<!-- Specifying COSIMO as location of the schema for validation purposes -->
 	<xsl:variable name="schemaLocation">http://www.loc.gov/mods/v3 http://cosimo.stanford.edu/standards/mods/v3/mods-3-3.xsd</xsl:variable>
@@ -83,7 +83,7 @@
 	
 	<!-- generic identity transform catches anything not matched elsewhere -->
 	<xsl:template match="*" mode="dor">
-		<xsl:element name="{local-name(.)}">
+		<xsl:element name="mods:{local-name(.)}">
 			<xsl:apply-templates select="@*|node()" mode="dor"/>
 		</xsl:element>
 	</xsl:template>
@@ -111,11 +111,11 @@
 			</mods:physicalDescription>
 			<!-- Copy the recordInfo from first pass, but add identifiers for catkey and oclc -->
 			<mods:recordInfo>
-				<xsl:for-each select="../mods:recordInfo">
-					<xsl:apply-templates mode="dor"/>
-				</xsl:for-each>
+				<xsl:for-each select="../mods:recordInfo/*[not(self::mods:recordIdentifier)]">
+					<xsl:apply-templates select="self::node()" mode="dor"/>
+				 </xsl:for-each>
 				<xsl:if test="string($catkey)">
-					<mods:recordIdentifier source="SU Library catalog key">
+					<mods:recordIdentifier source="SUL catalog key">
 						<xsl:value-of select="$catkey"/>
 					</mods:recordIdentifier>
 				</xsl:if>
@@ -135,21 +135,6 @@
 			<mods:reformattingQuality>
 				<xsl:text>preservation</xsl:text>
 			</mods:reformattingQuality>
-			<mods:internetMediaType>
-				<xsl:text>image/jp2</xsl:text>
-			</mods:internetMediaType>
-			<mods:internetMediaType>
-				<xsl:text>image/tif</xsl:text>
-			</mods:internetMediaType>
-			<mods:internetMediaType>
-				<xsl:text>text/html</xsl:text>
-			</mods:internetMediaType>
-			<mods:internetMediaType>
-				<xsl:text>text/plain</xsl:text>
-			</mods:internetMediaType>
-			<mods:internetMediaType>
-				<xsl:text>application/pdf</xsl:text>
-			</mods:internetMediaType>
 			<mods:digitalOrigin>
 				<xsl:text>reformatted digital</xsl:text>
 			</mods:digitalOrigin>
@@ -174,17 +159,17 @@
 			</xsl:if>
 		</mods:recordInfo>
 
-
+		<!-- 
 		<mods:accessCondition type="useAndReproduction" displayLabel="Copyright Stanford University. Stanford, CA 94305. (650) 723-2300."
 			>Stanford University Libraries and Academic Information Resources - Terms of Use SULAIR Web sites are subject to Stanford University's standard Terms of Use (See http://www.stanford.edu/home/atoz/terms.html) These terms include a limited personal, non-exclusive, non-transferable license to access and use the sites, and to download - where permitted - material for personal, non-commercial, non-display use only.   Please contact the University Librarian to request permission to use SULAIR Web sites and contents beyond the scope of the above license, including but not limited to republication to a group or republishing the Web site or parts of the Web site. SULAIR provides access to a variety of external databases and resources, which sites are governed by their own Terms of Use, as well as contractual access restrictions.   The Terms of Use on these external sites always govern the data available there. Please consult with library staff if you have questions about data access and availability.</mods:accessCondition>
-
+ 		-->
 		<xsl:if test="string($druid)">
-			<mods:identifier type="local" displayLabel="SUL_OBJ_DRUID">
+			<mods:identifier type="local" displayLabel="SUL Resource ID">
 				<xsl:value-of select="$druid"/>
 			</mods:identifier>
 			<mods:location>
 				<mods:physicalLocation>Stanford University Libraries</mods:physicalLocation>
-				<mods:url>https://purl.stanford.edu/<xsl:value-of select="substring-after($druid,':')"/></mods:url>
+				<mods:url>http://purl.stanford.edu/<xsl:value-of select="substring-after($druid,':')"/></mods:url>
 			</mods:location>
 		</xsl:if>
 

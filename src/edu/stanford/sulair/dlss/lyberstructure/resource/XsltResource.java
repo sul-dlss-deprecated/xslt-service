@@ -51,7 +51,7 @@ public class XsltResource {
 	//	* If log4j is not present, and the JDK is 1.4+, uses Java's own logging implementation
 	private static final Log LOG = LogFactory.getLog( XsltResource.class );
 
-	private static final String xsltUrlPrefix = "http://cosimo.stanford.edu/services/dor-transforms/";
+	//private static final String xsltUrlPrefix = "http://cosimo.stanford.edu/services/dor-transforms/";
 	
 	@Path("marc2mods")
 	@POST
@@ -60,7 +60,7 @@ public class XsltResource {
 	public Response doMarc2ModsTransform(String marc) {
 		String mods;
 		try {
-			String xsltURL= xsltUrlPrefix + "DLF_STANFORD_MARC2MODS3-3.xsl";
+			String xsltURL= "file:DLF_STANFORD_MARC2MODS3-3.xsl";
 			mods=runTransform(xsltURL,marc);
 			
 		} catch (Exception e) {
@@ -82,9 +82,9 @@ public class XsltResource {
 	public Response doDorMarc2ModsTransform(@Context UriInfo uriInfo, String marc) {
 		String mods;
 		try {
-			String xsltURL=xsltUrlPrefix + "DOR_MARC2MODS3-3.xsl";
 			// the XSLT requires Params
 			MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
+			String xsltURL="file:DOR_MARC2MODS3-3.xsl";
 			mods=runTransform(xsltURL,marc, queryParams);
 			
 		} catch (Exception e) {
@@ -107,7 +107,7 @@ public class XsltResource {
 	public Response doMods2DcTransform(String mods) {
 		String dc;
 		try {
-			String xsltURL=xsltUrlPrefix + "MODS3-22simpleDC.xsl";
+			String xsltURL= "file:MODS3-22simpleDC.xsl";
 			dc=runTransform(xsltURL,mods);
 			
 		} catch (Exception e) {
@@ -122,6 +122,29 @@ public class XsltResource {
 		return Response.status(200).entity(dc).build();
 	}
 	
+	@Path("dor_mods2dc")
+	@POST
+	@Consumes("application/xml")
+	@Produces("application/xml")
+	public Response doDorMods2DcTransform(@Context UriInfo uriInfo, String mods) {
+		String dc;
+		try {
+			MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
+			String xsltURL="file:DOR_MODS3_DC.xsl";
+			dc=runTransform(xsltURL,mods, queryParams);
+			
+		} catch (Exception e) {
+			//Handle any errors
+			LOG.error(e);
+			return ResourceUtilities.createErrorResponse(e);
+		}
+		
+		LOG.info("helpful log message");
+		
+		//Send xml response to client
+		return Response.status(200).entity(dc).build();
+	}
+
 	@Path("dor2contentmap")
 	@POST
 	@Consumes("application/xml")
@@ -129,7 +152,7 @@ public class XsltResource {
 	public Response doDor2ContentMapTransform(String objMd) {
 		String dc;
 		try {
-			String xsltURL=xsltUrlPrefix + "ContentMapfromDorMetadata.xsl";
+			String xsltURL= "file:ContentMapfromDorMetadata.xsl";
 			dc=runTransform(xsltURL,objMd);
 			
 		} catch (Exception e) {
@@ -151,7 +174,7 @@ public class XsltResource {
 	public Response doDor2TmTransform(String objMd) {
 		String dc;
 		try {
-			String xsltURL=xsltUrlPrefix + "TMfromDorMetadata.xsl";
+			String xsltURL= "TMfromDorMetadata.xsl";
 			dc=runTransform(xsltURL,objMd);
 			
 		} catch (Exception e) {

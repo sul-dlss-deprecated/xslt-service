@@ -11,6 +11,7 @@ import java.io.Writer;
 
 import javax.ws.rs.core.MediaType;
 
+import org.custommonkey.xmlunit.DetailedDiff;
 import org.custommonkey.xmlunit.Diff;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,7 +26,7 @@ import edu.stanford.sulair.dlss.lyberstructure.AbstractHttpServerTester;
 public class XsltResourceTests extends AbstractHttpServerTester {
 
 	@Test
-	public void marc2ModsDor() throws IOException, SAXException {
+	public void dorMarc2Mods() throws IOException, SAXException {
 		File marcxmlFile = new File("test/xmlTestData/marcxml-887408.xml");
 		String marcxmlData = readToString(marcxmlFile, "UTF-8");
 		File modsFile = new File("test/xmlTestData/mods-887408.xml");
@@ -34,7 +35,7 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 		WebResource objResource = Client.create().resource(getUri().path("dor_marc2mods")
 				.queryParam("catkey", "887408")
 				.queryParam("barcode", "36105036457831")
-				.queryParam("druid", "dr:xxxxxxxxxxx")
+				.queryParam("druid", "druid:xxxxxxxxxxx")
 				.queryParam("test", "true")
 				.build());
 		ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(
@@ -43,29 +44,14 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 		Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
 		String modsReturned = r.getEntity(String.class);
 		Diff xmlDiff = new Diff(modsExpected, modsReturned);
+		// DetailedDiff detailedDiff = new DetailedDiff(xmlDiff);
+		// System.out.println(detailedDiff.toString());
 		Assert.assertTrue(xmlDiff.identical());
 	}
 	
 
 	@Test
 	public void marc2Mods() throws IOException, SAXException {
-		File marcxmlFile = new File("test/xmlTestData/marcxml-10094.xml");
-		String marcxmlData = readToString(marcxmlFile, "UTF-8");
-		File modsFile = new File("test/xmlTestData/mods-10094.xml");
-		String modsExpected = readToString(modsFile, "UTF-8");
-		startServer(XsltResource.class);
-		WebResource objResource = Client.create().resource(getUri().path("marc2mods").build());
-		ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(
-				ClientResponse.class);
-		Assert.assertEquals(200, r.getStatus());
-		Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
-		String modsReturned = r.getEntity(String.class);
-		Diff xmlDiff = new Diff(modsExpected, modsReturned);
-		Assert.assertTrue(xmlDiff.identical());
-	}
-
-	@Test
-	public void marc2ModsUnicode() throws IOException, SAXException {
 		File marcxmlFile = new File("test/xmlTestData/marcxml-6272783.xml");
 		String marcxmlData = readToString(marcxmlFile, "UTF-8");
 		File modsFile = new File("test/xmlTestData/mods-6272783.xml");
@@ -82,19 +68,24 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 	}
 
 	@Test
-	public void mods2Dc() throws IOException, SAXException {
+	public void dorMods2Dc() throws IOException, SAXException {
 		File modsFile = new File("test/xmlTestData/mods-10094.xml");
 		String modsData = readToString(modsFile, "UTF-8");
 		File dcFile = new File("test/xmlTestData/dc-10094.xml");
 		String dcExpected = readToString(dcFile, "UTF-8");
 		startServer(XsltResource.class);
-		WebResource objResource = Client.create().resource(getUri().path("mods2dc").build());
+		WebResource objResource = Client.create().resource(getUri().path("dor_mods2dc")
+				.queryParam("identifiers", "id1:value1,id2:value2,id3:value3")
+				.build());
 		ClientResponse r = objResource.entity(modsData, "application/xml").post(
 				ClientResponse.class);
 		Assert.assertEquals(200, r.getStatus());
 		Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
 		String dcReturned = r.getEntity(String.class);
+		// System.out.println(dcReturned);
 		Diff xmlDiff = new Diff(dcExpected, dcReturned);
+		// DetailedDiff detailDiff = new DetailedDiff(xmlDiff);
+		// System.out.println(detailDiff.toString());
 		Assert.assertTrue(xmlDiff.identical());
 	}
 

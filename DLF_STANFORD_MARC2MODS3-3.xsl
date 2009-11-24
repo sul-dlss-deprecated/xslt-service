@@ -138,7 +138,7 @@ Revision 1.2 - Added Log Comment  2003/03/24 19:37:42  ckeith
 				<xsl:choose>
 					<xsl:when test="@ind2>0">
 						<nonSort>
-							<xsl:value-of select="substring($titleChop,1,@ind2)"/>
+							<xsl:value-of select="normalize-space(substring($titleChop,1,@ind2))"/>
 						</nonSort>
 						<title>
 							<xsl:value-of select="substring($titleChop,@ind2+1)"/>

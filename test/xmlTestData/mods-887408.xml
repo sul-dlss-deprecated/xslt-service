@@ -4,7 +4,7 @@
            version="3.3"
            xsi:schemaLocation="http://www.loc.gov/mods/v3 http://cosimo.stanford.edu/standards/mods/v3/mods-3-3.xsd">
    <mods:titleInfo>
-      <mods:nonSort>The </mods:nonSort>
+      <mods:nonSort>The</mods:nonSort>
       <mods:title>winter's tale</mods:title>
    </mods:titleInfo>
    <mods:name type="personal">
@@ -47,31 +47,23 @@
          <mods:recordContentSource authority="marcorg">MiU</mods:recordContentSource>
          <mods:recordCreationDate encoding="marc">760521</mods:recordCreationDate>
          <mods:recordChangeDate encoding="iso8601">19910715000000.0</mods:recordChangeDate>
-         <mods:recordIdentifier>a887408</mods:recordIdentifier>
-         <mods:recordIdentifier source="SU Library catalog key">887408</mods:recordIdentifier>
+         <mods:recordIdentifier source="SUL catalog key">887408</mods:recordIdentifier>
          <mods:recordIdentifier source="oclc">3794399</mods:recordIdentifier>
       </mods:recordInfo>
    </mods:relatedItem>
    <mods:physicalDescription>
       <mods:form authority="marcform">electronic</mods:form>
       <mods:reformattingQuality>preservation</mods:reformattingQuality>
-      <mods:internetMediaType>image/jp2</mods:internetMediaType>
-      <mods:internetMediaType>image/tif</mods:internetMediaType>
-      <mods:internetMediaType>text/html</mods:internetMediaType>
-      <mods:internetMediaType>text/plain</mods:internetMediaType>
-      <mods:internetMediaType>application/pdf</mods:internetMediaType>
       <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
    </mods:physicalDescription>
    <mods:note displayLabel="statement of responsibility">Shakespeare ; with coloured picturs painted in tempera by Maxwell Armfield.</mods:note>
    <mods:recordInfo>
-      <mods:recordContentSource>DOR_MARC2MODS3-3.xsl Revision 1.0</mods:recordContentSource>
+      <mods:recordContentSource>DOR_MARC2MODS3-3.xsl Revision 1.1</mods:recordContentSource>
       <mods:recordIdentifier source="Data Provider Digital Object Identifier">36105036457831</mods:recordIdentifier>
    </mods:recordInfo>
-   <mods:accessCondition type="useAndReproduction"
-                         displayLabel="Copyright Stanford University. Stanford, CA 94305. (650) 723-2300.">Stanford University Libraries and Academic Information Resources - Terms of Use SULAIR Web sites are subject to Stanford University's standard Terms of Use (See http://www.stanford.edu/home/atoz/terms.html) These terms include a limited personal, non-exclusive, non-transferable license to access and use the sites, and to download - where permitted - material for personal, non-commercial, non-display use only.   Please contact the University Librarian to request permission to use SULAIR Web sites and contents beyond the scope of the above license, including but not limited to republication to a group or republishing the Web site or parts of the Web site. SULAIR provides access to a variety of external databases and resources, which sites are governed by their own Terms of Use, as well as contractual access restrictions.   The Terms of Use on these external sites always govern the data available there. Please consult with library staff if you have questions about data access and availability.</mods:accessCondition>
-   <mods:identifier type="local" displayLabel="SUL_OBJ_DRUID">dr:xxxxxxxxxxx</mods:identifier>
+   <mods:identifier type="local" displayLabel="SUL Resource ID">druid:xxxxxxxxxxx</mods:identifier>
    <mods:location>
       <mods:physicalLocation>Stanford University Libraries</mods:physicalLocation>
-      <mods:url>https://purl.stanford.edu/xxxxxxxxxxx</mods:url>
+      <mods:url>http://purl.stanford.edu/xxxxxxxxxxx</mods:url>
    </mods:location>
 </mods:mods>
