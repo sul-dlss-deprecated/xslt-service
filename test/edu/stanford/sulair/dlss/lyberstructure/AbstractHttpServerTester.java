@@ -93,6 +93,7 @@ public abstract class AbstractHttpServerTester{
             throw new RuntimeException(ex);
         }
         server.start();
+        System.out.println(System.getProperty("user.dir"));
         System.out.println("Started HttpServer");
 
         int timeToSleep = TestHelper.getEnvVariable("JERSEY_HTTP_SLEEP", 1000);

@@ -51,7 +51,15 @@ public class XsltResource {
 	//	* If log4j is not present, and the JDK is 1.4+, uses Java's own logging implementation
 	private static final Log LOG = LogFactory.getLog( XsltResource.class );
 
-	//private static final String xsltUrlPrefix = "http://cosimo.stanford.edu/services/dor-transforms/";
+	private static String xsltUrlPrefix = "http://localhost:8080/xslt/" ;
+	
+	{
+		File projectSource = new File("src");
+		if (projectSource.isDirectory()) {
+			xsltUrlPrefix = "http://localhost:9998/xslt/";			
+		}		
+	}
+	
 	
 	@Path("marc2mods")
 	@POST
@@ -60,7 +68,7 @@ public class XsltResource {
 	public Response doMarc2ModsTransform(String marc) {
 		String mods;
 		try {
-			String xsltURL= "file:DLF_STANFORD_MARC2MODS3-3.xsl";
+			String xsltURL= xsltUrlPrefix + "DLF_STANFORD_MARC2MODS3-3.xsl";
 			mods=runTransform(xsltURL,marc);
 			
 		} catch (Exception e) {
@@ -84,7 +92,7 @@ public class XsltResource {
 		try {
 			// the XSLT requires Params
 			MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
-			String xsltURL="file:DOR_MARC2MODS3-3.xsl";
+			String xsltURL=xsltUrlPrefix + "DOR_MARC2MODS3-3.xsl";
 			mods=runTransform(xsltURL,marc, queryParams);
 			
 		} catch (Exception e) {
@@ -107,7 +115,7 @@ public class XsltResource {
 	public Response doMods2DcTransform(String mods) {
 		String dc;
 		try {
-			String xsltURL= "file:MODS3-22simpleDC.xsl";
+			String xsltURL= xsltUrlPrefix + "MODS3-22simpleDC.xsl";
 			dc=runTransform(xsltURL,mods);
 			
 		} catch (Exception e) {
@@ -130,7 +138,7 @@ public class XsltResource {
 		String dc;
 		try {
 			MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
-			String xsltURL="file:DOR_MODS3_DC.xsl";
+			String xsltURL=xsltUrlPrefix + "DOR_MODS3_DC.xsl";
 			dc=runTransform(xsltURL,mods, queryParams);
 			
 		} catch (Exception e) {
@@ -152,7 +160,7 @@ public class XsltResource {
 	public Response doDor2ContentMapTransform(String objMd) {
 		String dc;
 		try {
-			String xsltURL= "file:ContentMapfromDorMetadata.xsl";
+			String xsltURL= xsltUrlPrefix + "ContentMapfromDorMetadata.xsl";
 			dc=runTransform(xsltURL,objMd);
 			
 		} catch (Exception e) {
