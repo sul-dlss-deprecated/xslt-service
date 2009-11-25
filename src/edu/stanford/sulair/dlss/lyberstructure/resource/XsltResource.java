@@ -1,9 +1,6 @@
 package edu.stanford.sulair.dlss.lyberstructure.resource;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -52,13 +49,16 @@ public class XsltResource {
 	private static final Log LOG = LogFactory.getLog( XsltResource.class );
 
 	private static String xsltUrlPrefix = "http://localhost:8080/xslt/" ;
+    private static String xsltFilePrefix = System.getProperty("user.dir") + "/webapps/xslt/WEB-INF/xslt_files/";
 	
-	{
-		File projectSource = new File("src");
-		if (projectSource.isDirectory()) {
-			xsltUrlPrefix = "http://localhost:9998/xslt/";			
-		}		
-	}
+    public static void setTestXsltPrefixes(String prefix){
+        if(prefix == null){
+            xsltUrlPrefix = "http://localhost:9998/context/xslt_files/";
+        }else{
+            xsltUrlPrefix = prefix + "/xslt_files/";
+        }
+        xsltFilePrefix = System.getProperty("user.dir") + "/WebContent/WEB-INF/xslt_files/";
+    }
 	
 	
 	@Path("marc2mods")
@@ -195,7 +195,34 @@ public class XsltResource {
 		
 		//Send xml response to client
 		return Response.status(200).entity(dc).build();
-	}	
+	}
+
+    @Path("xslt_files/{fileName}")
+    @GET
+    @Produces("application/xml")
+    public Response getXsltFile(@PathParam("fileName") String fileName){
+        String xsl = null;
+		try {
+			xsl = readFileAsString(xsltFilePrefix + fileName);
+		} catch (Exception e) {
+			//Handle any errors
+			LOG.error(e);
+			return ResourceUtilities.createErrorResponse(e);
+		}
+
+		LOG.info("serving: " + fileName);
+
+		//Send xml response to client
+		return Response.status(200).entity(xsl).build();
+    }
+
+    private static String readFileAsString(String filePath) throws java.io.IOException{
+        byte[] buffer = new byte[(int) new File(filePath).length()];
+        FileInputStream f = new FileInputStream(filePath);
+        f.read(buffer);
+        return new String(buffer);
+    }
+
 
 	private String runTransform (String xsltURL, String inputXml) throws SaxonApiException {
 		return runTransform(xsltURL, inputXml, null);
@@ -207,6 +234,7 @@ public class XsltResource {
 		Processor proc = new Processor(false);
 		proc.setConfigurationProperty(FeatureKeys.VERSION_WARNING, false);
         XsltCompiler comp = proc.newXsltCompiler();
+        System.out.println("before xslt fetch");
         XsltExecutable exp = comp.compile(new StreamSource(xsltURL));
         XdmNode source = proc.newDocumentBuilder().build(new StreamSource(new StringReader(inputXml)));
         Serializer out = new Serializer();
@@ -235,9 +263,6 @@ public class XsltResource {
         String outputXml = sw.toString();
         return outputXml;
 	}
-	
 
-	
-	
 
 }

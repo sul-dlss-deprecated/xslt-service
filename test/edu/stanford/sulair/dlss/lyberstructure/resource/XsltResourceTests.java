@@ -11,10 +11,10 @@ import java.io.Writer;
 
 import javax.ws.rs.core.MediaType;
 
-import org.custommonkey.xmlunit.DetailedDiff;
 import org.custommonkey.xmlunit.Diff;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.Before;
 import org.xml.sax.SAXException;
 
 import com.sun.jersey.api.client.Client;
@@ -25,8 +25,15 @@ import edu.stanford.sulair.dlss.lyberstructure.AbstractHttpServerTester;
 
 public class XsltResourceTests extends AbstractHttpServerTester {
 
+    @Before
+    public void setup(){
+        XsltResource.setTestXsltPrefixes(getUri().build().toString());
+    }
+
+
 	@Test
-	public void dorMarc2Mods() throws IOException, SAXException {
+	public
+    void dorMarc2Mods() throws IOException, SAXException {
 		File marcxmlFile = new File("test/xmlTestData/marcxml-887408.xml");
 		String marcxmlData = readToString(marcxmlFile, "UTF-8");
 		File modsFile = new File("test/xmlTestData/mods-887408.xml");
@@ -88,6 +95,17 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 		// System.out.println(detailDiff.toString());
 		Assert.assertTrue(xmlDiff.identical());
 	}
+
+    @Test
+    public void getXsltFile(){
+        startServer(XsltResource.class);
+		WebResource objResource = Client.create().resource(getUri().path("xslt_files/DLF_STANFORD_MARC2MODS3-3.xsl")
+				.build());
+		ClientResponse r = objResource.get(ClientResponse.class);
+        String xslReturned = r.getEntity(String.class);
+		Assert.assertEquals(200, r.getStatus());
+		Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
+    }
 
 	/**
 	 * Copies characters from reader to writer

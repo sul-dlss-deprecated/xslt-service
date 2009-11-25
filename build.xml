@@ -108,6 +108,7 @@
 			<exclude name="WEB-INF/web.xml"/>
 			<include name="WEB-INF/lib/**"/>
 			<include name="WEB-INF/classes/**"/>
+            <include name="WEB-INF/xslt_files/**"/>
 			<include name="META-INF/*"/>
 			<exclude name="**/.*"/>
 		</war>
