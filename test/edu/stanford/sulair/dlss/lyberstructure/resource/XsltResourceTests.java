@@ -11,6 +11,7 @@ import java.io.Writer;
 
 import javax.ws.rs.core.MediaType;
 
+import org.custommonkey.xmlunit.DetailedDiff;
 import org.custommonkey.xmlunit.Diff;
 import org.junit.Assert;
 import org.junit.Test;
@@ -43,6 +44,7 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 				.queryParam("catkey", "887408")
 				.queryParam("barcode", "36105036457831")
 				.queryParam("druid", "druid:xxxxxxxxxxx")
+				.queryParam("volume", "V.5")
 				.queryParam("test", "true")
 				.build());
 		ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(
@@ -51,8 +53,8 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 		Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
 		String modsReturned = r.getEntity(String.class);
 		Diff xmlDiff = new Diff(modsExpected, modsReturned);
-		// DetailedDiff detailedDiff = new DetailedDiff(xmlDiff);
-		// System.out.println(detailedDiff.toString());
+		DetailedDiff detailedDiff = new DetailedDiff(xmlDiff);
+		System.out.println(detailedDiff.toString());
 		Assert.assertTrue(xmlDiff.identical());
 	}
 	

@@ -25,6 +25,7 @@
 	<xsl:param name="catkey" select="$ckey"/>
 	<xsl:param name="barcode"/>
 	<xsl:param name="druid"/>
+	<xsl:param name="volume"/>
 	<xsl:param name="test"/>
 	
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
@@ -100,6 +101,16 @@
 		<xsl:copy>
 			<xsl:value-of select="normalize-space(.)"/>
 		</xsl:copy>
+	</xsl:template>
+	
+	<!-- Add volume number to titleInfo as appropriate -->
+	<xsl:template match="mods:titleInfo" mode="dor">
+		<mods:titleInfo>
+			<xsl:apply-templates mode="dor"/>
+			<xsl:if test="string($volume)">
+				<mods:partNumber><xsl:value-of select="$volume"/></mods:partNumber>
+			</xsl:if>
+		</mods:titleInfo>
 	</xsl:template>
 
 	<!-- Use the input's physicalDescription to trigger creation of  mods:relatedItem type="original" -->
