@@ -29,10 +29,10 @@ Start and end dates are presented as span dates in dc:date and in dc:coverage
 	
 	<xsl:template match="mods:mods" >
 		<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
-				<xsl:apply-templates/>
+			<xsl:apply-templates/>
 			<xsl:for-each select="tokenize($identifiers,',')">
-					<dc:identifier><xsl:value-of select="."/></dc:identifier>
-				</xsl:for-each>
+				<dc:identifier><xsl:value-of select="."/></dc:identifier>
+			</xsl:for-each>
 		</oai_dc:dc>
 	</xsl:template>
 	
@@ -105,18 +105,11 @@ Start and end dates are presented as span dates in dc:date and in dc:coverage
 
 	<xsl:template match="mods:identifier">
 		<xsl:variable name="type" select="translate(@type,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
-		<xsl:choose>
-			<xsl:when test="contains ('isbn issn uri doi lccn uri', $type)">
-				<dc:identifier>
-					<xsl:value-of select="$type"/>:<xsl:value-of select="."/>
-				</dc:identifier>
-			</xsl:when>
-			<xsl:otherwise>
-				<dc:identifier>
-					<xsl:value-of select="."/>
-				</dc:identifier>
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:if test="contains ('isbn issn uri doi lccn uri', $type)">
+			<dc:identifier>
+				<xsl:value-of select="$type"/>:<xsl:value-of select="."/>
+			</dc:identifier>
+		</xsl:if>
 	</xsl:template>
 
   <xsl:template match="mods:language">
