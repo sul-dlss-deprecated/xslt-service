@@ -25,7 +25,6 @@
 	<xsl:param name="catkey" select="$ckey"/>
 	<xsl:param name="barcode"/>
 	<xsl:param name="druid"/>
-	<xsl:param name="volume"/>
 	<xsl:param name="test"/>
 	
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
@@ -77,7 +76,7 @@
 		</xsl:choose>
 	</xsl:variable>
 
-	<!-- Add the DOR enhancements -->
+   <!-- We capture the first pass recordInfo above, then use it to dd DOR enhancements -->
 	<xsl:template match="/">
 		<xsl:apply-templates select="$firstpass" mode="dor"/>
 	</xsl:template>
@@ -103,16 +102,6 @@
 		</xsl:copy>
 	</xsl:template>
 	
-	<!-- Add volume number to titleInfo as appropriate -->
-	<xsl:template match="mods:titleInfo" mode="dor">
-		<mods:titleInfo>
-			<xsl:apply-templates mode="dor"/>
-			<xsl:if test="string($volume)">
-				<mods:partNumber><xsl:value-of select="$volume"/></mods:partNumber>
-			</xsl:if>
-		</mods:titleInfo>
-	</xsl:template>
-
 	<!-- Use the input's physicalDescription to trigger creation of  mods:relatedItem type="original" -->
 	<xsl:template match="mods:physicalDescription" mode="dor">
 		<mods:relatedItem type="original">
@@ -138,7 +127,7 @@
 			</mods:recordInfo>
 		</mods:relatedItem>
 
-		<!-- Add boiler plate for MIME formats that may be included -->
+		<!-- Add boilerplate elements for digitally reformated materials -->
 		<mods:physicalDescription>
 			<mods:form authority="marcform">
 				<xsl:text>electronic</xsl:text>
@@ -153,8 +142,8 @@
 
 	</xsl:template>
 
-  <!-- We capture the first pass recordInfo above, but using it again to trigger more custom additions -->
-	<xsl:template match="mods:recordInfo" mode="dor">
+ 	<!-- Document the authorship of the output, and include barcode and druid identifiers -->
+ 	<xsl:template match="mods:recordInfo" mode="dor">
 
 		<mods:recordInfo>
 			<mods:recordContentSource><xsl:value-of select="$thisXSLT"/></mods:recordContentSource>
@@ -170,10 +159,6 @@
 			</xsl:if>
 		</mods:recordInfo>
 
-		<!-- 
-		<mods:accessCondition type="useAndReproduction" displayLabel="Copyright Stanford University. Stanford, CA 94305. (650) 723-2300."
-			>Stanford University Libraries and Academic Information Resources - Terms of Use SULAIR Web sites are subject to Stanford University's standard Terms of Use (See http://www.stanford.edu/home/atoz/terms.html) These terms include a limited personal, non-exclusive, non-transferable license to access and use the sites, and to download - where permitted - material for personal, non-commercial, non-display use only.   Please contact the University Librarian to request permission to use SULAIR Web sites and contents beyond the scope of the above license, including but not limited to republication to a group or republishing the Web site or parts of the Web site. SULAIR provides access to a variety of external databases and resources, which sites are governed by their own Terms of Use, as well as contractual access restrictions.   The Terms of Use on these external sites always govern the data available there. Please consult with library staff if you have questions about data access and availability.</mods:accessCondition>
- 		-->
 		<xsl:if test="string($druid)">
 			<mods:identifier type="local" displayLabel="SUL Resource ID">
 				<xsl:value-of select="$druid"/>

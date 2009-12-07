@@ -44,7 +44,6 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 				.queryParam("catkey", "887408")
 				.queryParam("barcode", "36105036457831")
 				.queryParam("druid", "druid:xxxxxxxxxxx")
-				.queryParam("volume", "V.5")
 				.queryParam("test", "true")
 				.build());
 		ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(

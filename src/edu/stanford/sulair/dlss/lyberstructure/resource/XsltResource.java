@@ -234,7 +234,7 @@ public class XsltResource {
 		Processor proc = new Processor(false);
 		proc.setConfigurationProperty(FeatureKeys.VERSION_WARNING, false);
         XsltCompiler comp = proc.newXsltCompiler();
-        System.out.println("before xslt fetch");
+        // System.out.println("before xslt fetch");
         XsltExecutable exp = comp.compile(new StreamSource(xsltURL));
         XdmNode source = proc.newDocumentBuilder().build(new StreamSource(new StringReader(inputXml)));
         Serializer out = new Serializer();
