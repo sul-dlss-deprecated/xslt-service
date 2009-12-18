@@ -9,10 +9,12 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 import net.sf.saxon.FeatureKeys;
 import net.sf.saxon.s9api.*;
@@ -48,9 +50,10 @@ public class XsltResource {
 	//	* If log4j is not present, and the JDK is 1.4+, uses Java's own logging implementation
 	private static final Log LOG = LogFactory.getLog( XsltResource.class );
 
-	private static String xsltUrlPrefix = "http://localhost/xslt/xslt_files/" ;
-    private static String xsltFilePrefix = System.getProperty("user.dir") + "/webapps/xslt/WEB-INF/xslt_files/";
-	
+    private static String xsltFilePrefix;
+	private static String xsltUrlPrefix ;
+	private static boolean initialized = false;
+
     public static void setTestXsltPrefixes(String prefix){
         if(prefix == null){
             xsltUrlPrefix = "http://localhost:9998/context/xslt_files/";
@@ -58,7 +61,23 @@ public class XsltResource {
             xsltUrlPrefix = prefix + "/xslt_files/";
         }
         xsltFilePrefix = System.getProperty("user.dir") + "/WebContent/WEB-INF/xslt_files/";
+        initialized = true;
     }
+	
+	private void init()  {
+		if(initialized)
+			return;
+		xsltFilePrefix = System.getProperty("user.dir") + "/webapps/xslt/WEB-INF/xslt_files/";
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			String hostname = addr.getHostName();
+			xsltUrlPrefix = "http://" + hostname + "/xslt/xslt_files/";
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		initialized = true;		
+	}
 	
 	
 	@Path("marc2mods")
@@ -229,6 +248,7 @@ public class XsltResource {
 	}
 	
 	private String runTransform (String xsltURL, String inputXml, MultivaluedMap<String,String> params ) throws SaxonApiException {
+		init();
 		// http://www.saxonica.com/documentation/javadoc/net/sf/saxon/s9api/package-summary.html
 		// http://www.saxonica.com/download/S9APIExamples.java
 		Processor proc = new Processor(false);
