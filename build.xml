@@ -3,6 +3,7 @@
 <project name="transform" basedir="." default="all">
 
 	<property name="name" value="transform"/>
+    <property file="VERSION.properties"/>
 
 	<property name="war.dir" value="WebContent"/>
 	<property name="src.dir" value="src"/>
@@ -114,7 +115,7 @@
     -->
 	
 	<target name="prod-war" if="create-wars" >		
-		<war warfile="${dist.dir}/${name}-prod.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
+		<war warfile="${dist.dir}/${name}-prod-${version}.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
 			<include name="*"/>
 			<include name="WEB-INF/*.*"/>
 			<exclude name="WEB-INF/web.xml"/>
