@@ -2,7 +2,7 @@
 
 <project name="xslt" basedir="." default="all">
 
-	<property name="name" value="transform"/>
+	<property name="name" value="xslt"/>
     <property file="VERSION.properties"/>
 
 	<property name="war.dir" value="WebContent"/>
