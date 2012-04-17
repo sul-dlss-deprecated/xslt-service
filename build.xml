@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="transform" basedir="." default="all">
+<project name="xslt" basedir="." default="all">
 
 	<property name="name" value="transform"/>
     <property file="VERSION.properties"/>
