@@ -31,6 +31,26 @@ public class XsltResourceTests extends AbstractHttpServerTester {
         XsltResource.setTestXsltPrefixes(getUri().build().toString());
     }
 
+    @Test
+    public void transform() throws IOException, SAXException {
+        File marcxmlFile = new File("test/xmlTestData/marcxml-6272783.xml");
+        String marcxmlData = readToString(marcxmlFile, "UTF-8");
+        File modsFile = new File("test/xmlTestData/mods-6272783a.xml");
+        String modsExpected = readToString(modsFile, "UTF-8");
+        startServer(XsltResource.class);
+        WebResource objResource = Client.create().resource(getUri().path("transform/MARC21slim2MODS3-3").build());
+        ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(
+                ClientResponse.class);
+        Assert.assertEquals(200, r.getStatus());
+        Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
+        String modsReturned = r.getEntity(String.class);
+        //System.out.println(modsReturned);
+        Diff xmlDiff = new Diff(modsExpected, modsReturned);
+        //DetailedDiff detailDiff = new DetailedDiff(xmlDiff);
+        //System.out.println(detailDiff.toString());
+        Assert.assertTrue(xmlDiff.identical());
+    }
+
 
 	@Test
 	public
@@ -62,7 +82,7 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 	public void marc2Mods() throws IOException, SAXException {
 		File marcxmlFile = new File("test/xmlTestData/marcxml-6272783.xml");
 		String marcxmlData = readToString(marcxmlFile, "UTF-8");
-		File modsFile = new File("test/xmlTestData/mods-6272783.xml");
+		File modsFile = new File("test/xmlTestData/mods-6272783a.xml");
 		String modsExpected = readToString(modsFile, "UTF-8");
 		startServer(XsltResource.class);
 		WebResource objResource = Client.create().resource(getUri().path("marc2mods").build());
@@ -71,7 +91,10 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 		Assert.assertEquals(200, r.getStatus());
 		Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
 		String modsReturned = r.getEntity(String.class);
+        //System.out.println(modsReturned);
 		Diff xmlDiff = new Diff(modsExpected, modsReturned);
+        //DetailedDiff detailDiff = new DetailedDiff(xmlDiff);
+		//System.out.println(detailDiff.toString());
 		Assert.assertTrue(xmlDiff.identical());
 	}
 

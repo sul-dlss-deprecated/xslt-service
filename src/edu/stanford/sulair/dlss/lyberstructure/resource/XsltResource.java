@@ -60,7 +60,30 @@ public class XsltResource {
         xsltFilePrefix = System.getProperty("user.dir") + "/WebContent/WEB-INF/xslt_files/";
     }
 	
-	
+
+    @Path("transform/{xsltfile}")
+    @POST
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public Response doTransform(@PathParam("xsltfile") String xsltfile, String input) {
+        String output;
+        try {
+            String xsltURL= xsltUrlPrefix + xsltfile + ".xsl";
+            output=runTransform(xsltURL,input);
+
+        } catch (Exception e) {
+            //Handle any errors
+            LOG.error(e);
+            return ResourceUtilities.createErrorResponse(e);
+        }
+
+        LOG.info("helpful log message");
+
+        //Send xml response to client
+        return Response.status(200).entity(output).build();
+    }
+
+
 	@Path("marc2mods")
 	@POST
 	@Consumes("application/xml")
@@ -68,7 +91,7 @@ public class XsltResource {
 	public Response doMarc2ModsTransform(String marc) {
 		String mods;
 		try {
-			String xsltURL= xsltUrlPrefix + "DLF_STANFORD_MARC2MODS3-3.xsl";
+			String xsltURL= xsltUrlPrefix + "MARC21slim2MODS3-3.xsl";
 			mods=runTransform(xsltURL,marc);
 			
 		} catch (Exception e) {
