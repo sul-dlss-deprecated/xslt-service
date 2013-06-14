@@ -96,7 +96,7 @@ public abstract class AbstractHttpServerTester{
         System.out.println(System.getProperty("user.dir"));
         System.out.println("Started HttpServer");
 
-        int timeToSleep = TestHelper.getEnvVariable("JERSEY_HTTP_SLEEP", 1000);
+        int timeToSleep = TestHelper.getEnvVariable("JERSEY_HTTP_SLEEP",2000);
         if (timeToSleep > 0) {
             System.out.println("Sleeping for " + timeToSleep + " ms");
             try {

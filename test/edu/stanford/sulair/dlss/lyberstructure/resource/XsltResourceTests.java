@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.custommonkey.xmlunit.DetailedDiff;
 import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Before;
@@ -51,7 +52,6 @@ public class XsltResourceTests extends AbstractHttpServerTester {
         Assert.assertTrue(xmlDiff.identical());
     }
 
-
 	@Test
 	public
     void dorMarc2Mods() throws IOException, SAXException {
@@ -76,16 +76,28 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 		System.out.println(detailedDiff.toString());
 		Assert.assertTrue(xmlDiff.identical());
 	}
-	
+
+    @Test
+    public void marc2ModsXsltName() {
+        String mods = null;
+        String xslt = null;
+        Assert.assertEquals("MARC21slim2MODS3-4",XsltResource.getMarc2ModsXsltName(mods,xslt));
+        mods = "3.4";
+        Assert.assertEquals("MARC21slim2MODS3-4",XsltResource.getMarc2ModsXsltName(mods,xslt));
+        xslt = "2.0";
+        Assert.assertEquals("MARC21slim_MODS3-4_XSLT2-0",XsltResource.getMarc2ModsXsltName(mods,xslt));
+        mods = "3.3";
+        Assert.assertEquals("MARC21slim2MODS3-3",XsltResource.getMarc2ModsXsltName(mods,xslt));
+    }
 
 	@Test
-	public void marc2Mods() throws IOException, SAXException {
+	public void marc2Mods33() throws IOException, SAXException {
 		File marcxmlFile = new File("test/xmlTestData/marcxml-6272783.xml");
 		String marcxmlData = readToString(marcxmlFile, "UTF-8");
 		File modsFile = new File("test/xmlTestData/mods-6272783a.xml");
 		String modsExpected = readToString(modsFile, "UTF-8");
 		startServer(XsltResource.class);
-		WebResource objResource = Client.create().resource(getUri().path("marc2mods").build());
+		WebResource objResource = Client.create().resource(getUri().path("marc2mods").queryParam("mods", "3.3").build());
 		ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(
 				ClientResponse.class);
 		Assert.assertEquals(200, r.getStatus());
@@ -96,6 +108,63 @@ public class XsltResourceTests extends AbstractHttpServerTester {
         //DetailedDiff detailDiff = new DetailedDiff(xmlDiff);
 		//System.out.println(detailDiff.toString());
 		Assert.assertTrue(xmlDiff.identical());
+	}
+
+    @Test
+	public void marc2Mods34() throws IOException, SAXException {
+		File marcxmlFile = new File("test/xmlTestData/4084372-marc.xml");
+		String marcxmlData = readToString(marcxmlFile, "UTF-8");
+		File modsFile = new File("test/xmlTestData/4084372-mods-3-4.xml");
+		String modsExpected = readToString(modsFile, "UTF-8");
+		startServer(XsltResource.class);
+		WebResource objResource = Client.create().resource(getUri().path("marc2mods").queryParam("mods", "3.4").build());
+		ClientResponse r = objResource.entity(marcxmlData, "application/xml").post(
+				ClientResponse.class);
+		Assert.assertEquals(200, r.getStatus());
+		Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
+		String modsReturned = r.getEntity(String.class);
+        //System.out.println(modsReturned);
+		Diff xmlDiff = new Diff(modsExpected, modsReturned);
+        //DetailedDiff detailDiff = new DetailedDiff(xmlDiff);
+		//System.out.println(detailDiff.toString());
+		Assert.assertTrue(xmlDiff.identical());
+	}
+
+    @Test
+    public void Mods2DcXsltName() {
+        String mods = null;
+        String xslt = null;
+        Assert.assertEquals("MODS3-4_DC_XSLT1-0",XsltResource.getMods2DcXsltName(mods,xslt));
+        mods = "3.4";
+        Assert.assertEquals("MODS3-4_DC_XSLT1-0",XsltResource.getMods2DcXsltName(mods,xslt));
+        xslt = "2.0";
+        Assert.assertEquals("MODS3-4_DC_XSLT2-0",XsltResource.getMods2DcXsltName(mods,xslt));
+        mods = "3.3";
+        Assert.assertEquals("MODS3-22simpleDC",XsltResource.getMods2DcXsltName(mods,xslt));
+    }
+
+    @Test
+	public void mods2dc() throws IOException, SAXException {
+		File modsxmlFile = new File("test/xmlTestData/4084372-mods-3-4.xml");
+		String modsxmlData = readToString(modsxmlFile, "UTF-8");
+		File dcFile = new File("test/xmlTestData/4084372-dc.xml");
+		String dcExpected = readToString(dcFile, "UTF-8");
+		startServer(XsltResource.class);
+		WebResource objResource = Client.create().resource(getUri().path("mods2dc").queryParam("mods", "3.4").build());
+		ClientResponse r = objResource.entity(modsxmlData, "application/xml").post(
+				ClientResponse.class);
+		Assert.assertEquals(200, r.getStatus());
+		Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, r.getType());
+		String modsReturned = r.getEntity(String.class);
+        //System.out.println(modsReturned);
+		Diff xmlDiff = new Diff(dcExpected, modsReturned);
+        //DetailedDiff detailDiff = new DetailedDiff(xmlDiff);
+		//System.out.println(detailDiff.toString());
+        XMLUnit.setIgnoreWhitespace(true);
+		Assert.assertTrue(xmlDiff.identical());
+        //Unless we reset this option, subsequent Diffs will fail with error:
+        // java.lang.IllegalArgumentException: When a DOMSource is used, saxon9-dom.jar must be on the classpath
+        XMLUnit.setIgnoreWhitespace(false);
 	}
 
 	@Test
@@ -123,7 +192,7 @@ public class XsltResourceTests extends AbstractHttpServerTester {
     @Test
     public void getXsltFile(){
         startServer(XsltResource.class);
-		WebResource objResource = Client.create().resource(getUri().path("xslt_files/DLF_STANFORD_MARC2MODS3-3.xsl")
+		WebResource objResource = Client.create().resource(getUri().path("xsltfile/MARC21slim2MODS3-4.xsl")
 				.build());
 		ClientResponse r = objResource.get(ClientResponse.class);
         String xslReturned = r.getEntity(String.class);

@@ -59,184 +59,12 @@ public class XsltResource {
         }
         xsltFilePrefix = System.getProperty("user.dir") + "/WebContent/WEB-INF/xslt_files/";
     }
-	
 
-    @Path("transform/{xsltfile}")
-    @POST
-    @Consumes("application/xml")
-    @Produces("application/xml")
-    public Response doTransform(@PathParam("xsltfile") String xsltfile, String input) {
-        String output;
-        try {
-            String xsltURL= xsltUrlPrefix + xsltfile + ".xsl";
-            output=runTransform(xsltURL,input);
-
-        } catch (Exception e) {
-            //Handle any errors
-            LOG.error(e);
-            return ResourceUtilities.createErrorResponse(e);
+    private static String xsltURL(String xsltname) {
+        if (! xsltname.endsWith(".xsl")) {
+            xsltname = xsltname + ".xsl";
         }
-
-        LOG.info("helpful log message");
-
-        //Send xml response to client
-        return Response.status(200).entity(output).build();
-    }
-
-
-	@Path("marc2mods")
-	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
-	public Response doMarc2ModsTransform(String marc) {
-		String mods;
-		try {
-			String xsltURL= xsltUrlPrefix + "MARC21slim2MODS3-3.xsl";
-			mods=runTransform(xsltURL,marc);
-			
-		} catch (Exception e) {
-			//Handle any errors
-			LOG.error(e);
-			return ResourceUtilities.createErrorResponse(e);
-		}
-		
-		LOG.info("helpful log message");
-		
-		//Send xml response to client
-		return Response.status(200).entity(mods).build();
-	}
-	
-	@Path("dor_marc2mods")
-	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
-	public Response doDorMarc2ModsTransform(@Context UriInfo uriInfo, String marc) {
-		String mods;
-		try {
-			// the XSLT requires Params
-			MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
-			String xsltURL=xsltUrlPrefix + "DOR_MARC2MODS3-3.xsl";
-			mods=runTransform(xsltURL,marc, queryParams);
-			
-		} catch (Exception e) {
-			//Handle any errors
-			LOG.error(e);
-			return ResourceUtilities.createErrorResponse(e);
-		}
-		
-		LOG.info("helpful log message");
-		
-		//Send xml response to client
-		return Response.status(200).entity(mods).build();
-	}
-
-
-	@Path("mods2dc")
-	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
-	public Response doMods2DcTransform(String mods) {
-		String dc;
-		try {
-			String xsltURL= xsltUrlPrefix + "MODS3-22simpleDC.xsl";
-			dc=runTransform(xsltURL,mods);
-			
-		} catch (Exception e) {
-			//Handle any errors
-			LOG.error(e);
-			return ResourceUtilities.createErrorResponse(e);
-		}
-		
-		LOG.info("helpful log message");
-		
-		//Send xml response to client
-		return Response.status(200).entity(dc).build();
-	}
-	
-	@Path("dor_mods2dc")
-	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
-	public Response doDorMods2DcTransform(@Context UriInfo uriInfo, String mods) {
-		String dc;
-		try {
-			MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
-			String xsltURL=xsltUrlPrefix + "DOR_MODS3_DC.xsl";
-			dc=runTransform(xsltURL,mods, queryParams);
-			
-		} catch (Exception e) {
-			//Handle any errors
-			LOG.error(e);
-			return ResourceUtilities.createErrorResponse(e);
-		}
-		
-		LOG.info("helpful log message");
-		
-		//Send xml response to client
-		return Response.status(200).entity(dc).build();
-	}
-
-	@Path("dor2contentmap")
-	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
-	public Response doDor2ContentMapTransform(String objMd) {
-		String dc;
-		try {
-			String xsltURL= xsltUrlPrefix + "ContentMapfromDorMetadata.xsl";
-			dc=runTransform(xsltURL,objMd);
-			
-		} catch (Exception e) {
-			//Handle any errors
-			LOG.error(e);
-			return ResourceUtilities.createErrorResponse(e);
-		}
-		
-		LOG.info("helpful log message");
-		
-		//Send xml response to client
-		return Response.status(200).entity(dc).build();
-	}
-	
-	@Path("dor2tm")
-	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
-	public Response doDor2TmTransform(String objMd) {
-		String dc;
-		try {
-			String xsltURL= "TMfromDorMetadata.xsl";
-			dc=runTransform(xsltURL,objMd);
-			
-		} catch (Exception e) {
-			//Handle any errors
-			LOG.error(e);
-			return ResourceUtilities.createErrorResponse(e);
-		}
-		
-		LOG.info("helpful log message");
-		
-		//Send xml response to client
-		return Response.status(200).entity(dc).build();
-	}
-
-    @Path("xslt_files/{fileName}")
-    @GET
-    @Produces("application/xml")
-    public Response getXsltFile(@PathParam("fileName") String fileName){
-        String xsl = null;
-		try {
-			xsl = readFileAsString(xsltFilePrefix + fileName);
-		} catch (Exception e) {
-			//Handle any errors
-			LOG.error(e);
-			return ResourceUtilities.createErrorResponse(e);
-		}
-
-		LOG.info("serving: " + fileName);
-
-		//Send xml response to client
-		return Response.status(200).entity(xsl).build();
+        return xsltFilePrefix + xsltname;
     }
 
     private static String readFileAsString(String filePath) throws java.io.IOException{
@@ -246,19 +74,119 @@ public class XsltResource {
         return new String(buffer);
     }
 
+    @Path("xsltfile/{xsltname}")
+    @GET
+    @Produces("application/xml")
+    public Response getXsltFile(@PathParam("xsltname") String xsltname) {
+        String xsl = null;
+		try {
+			xsl = readFileAsString(xsltURL(xsltname));
+		} catch (Exception e) {
+			LOG.error(e);
+			return ResourceUtilities.createErrorResponse(e);
+		}
+		LOG.info("serving: " + xsltname);
+		return Response.status(200).entity(xsl).build();
+    }
 
-	private String runTransform (String xsltURL, String inputXml) throws SaxonApiException {
-		return runTransform(xsltURL, inputXml, null);
+    @Path("transform/{xsltname}")
+    @POST
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public Response doTransform(@PathParam("xsltname") String xsltname, String input) {
+        return transformResponse(xsltname, input, null);
+    }
+
+	@Path("marc2mods")
+	@POST
+	@Consumes("application/xml")
+	@Produces("application/xml")
+	public Response doMarc2ModsTransform(@Context UriInfo uriInfo, String marcxml) {
+        String mods = uriInfo.getQueryParameters().getFirst("mods");
+        String xslt = uriInfo.getQueryParameters().getFirst("xslt");
+        String xsltname = getMarc2ModsXsltName(mods, xslt);
+        return transformResponse(xsltname, marcxml, null);
 	}
+
+    public static String getMarc2ModsXsltName(String mods, String xslt) {
+        if (mods == null) mods = "3.4";
+        if (xslt == null) xslt = "1.0";
+        String xsltname = null;
+        if (mods.equals("3.2")) {
+           xsltname = "MARC21slim2MODS3-2";
+        } else if (mods.equals("3.3")) {
+           xsltname = "MARC21slim2MODS3-3";
+        } else if (mods.equals("3.4") && xslt.equals("1.0")) {
+           xsltname = "MARC21slim2MODS3-4";
+        } else {
+           xsltname = "MARC21slim_MODS" + mods.replace('.','-') + "_XSLT" +  xslt.replace('.','-');
+        }
+        return xsltname;
+    }
 	
-	private String runTransform (String xsltURL, String inputXml, MultivaluedMap<String,String> params ) throws SaxonApiException {
+	@Path("dor_marc2mods")
+	@POST
+	@Consumes("application/xml")
+	@Produces("application/xml")
+    @Deprecated
+	public Response doDorMarc2ModsTransform(@Context UriInfo uriInfo, String marcxml) {
+        String xsltname = "DOR_MARC2MODS3-3";
+        return transformResponse(xsltname, marcxml, uriInfo);
+	}
+
+	@Path("mods2dc")
+	@POST
+	@Consumes("application/xml")
+	@Produces("application/xml")
+	public Response doMods2DcTransform(String modsxml) {
+        String mods = uriInfo.getQueryParameters().getFirst("mods");
+        String xslt = uriInfo.getQueryParameters().getFirst("xslt");
+        String xsltname = getMods2DcXsltName(mods, xslt);
+        return transformResponse(xsltname, modsxml, null);
+	}
+
+    public static String getMods2DcXsltName(String mods, String xslt) {
+        if (mods == null) mods = "3.4";
+        if (xslt == null) xslt = "1.0";
+        String xsltname = null;
+        if (mods.equals("3.2") || mods.equals("3.3")) {
+           xsltname = "MODS3-22simpleDC";
+        } else {
+           xsltname = "MODS" + mods.replace('.','-') + "_DC_XSLT" +  xslt.replace('.','-');
+        }
+        return xsltname;
+    }
+
+	@Path("dor_mods2dc")
+	@POST
+	@Consumes("application/xml")
+	@Produces("application/xml")
+    @Deprecated
+	public Response doDorMods2DcTransform(@Context UriInfo uriInfo, String mods) {
+        String xsltname = "DOR_MODS3_DC";
+        return transformResponse(xsltname, mods, uriInfo);
+	}
+
+    private Response transformResponse(String xsltfile, String inputXml, UriInfo uriInfo)  {
+        String response = null;
+        try {
+            response = runTransform(xsltfile, inputXml, uriInfo);
+        } catch (Exception e) {
+            LOG.error(e);
+            return ResourceUtilities.createErrorResponse(e);
+        }
+        LOG.info(xsltfile + " transform completed");
+        return Response.status(200).entity(response).build();
+    }
+
+	private String runTransform (String xsltname, String inputXml, UriInfo uriInfo ) throws SaxonApiException {
 		// http://www.saxonica.com/documentation/javadoc/net/sf/saxon/s9api/package-summary.html
 		// http://www.saxonica.com/download/S9APIExamples.java
 		Processor proc = new Processor(false);
 		proc.setConfigurationProperty(FeatureKeys.VERSION_WARNING, false);
         XsltCompiler comp = proc.newXsltCompiler();
         // System.out.println("before xslt fetch");
-        XsltExecutable exp = comp.compile(new StreamSource(xsltURL));
+        XsltExecutable exp = comp.compile(new StreamSource(xsltURL(xsltname)));
         XdmNode source = proc.newDocumentBuilder().build(new StreamSource(new StringReader(inputXml)));
         Serializer out = new Serializer();
         out.setOutputProperty(Serializer.Property.METHOD, "xml");
@@ -275,12 +203,15 @@ public class XsltResource {
         XsltTransformer trans = exp.load();
         trans.setInitialContextNode(source);
         trans.setDestination(out);
-        if (params != null) {
-        	for (Entry<String,List<String>> param : params.entrySet()) {
-        		QName qname = new QName(param.getKey());
-        		XdmValue value = new XdmAtomicValue ( param.getValue().get(0));
-        		trans.setParameter(qname, value);
-        	}
+        if (uriInfo != null)   {
+            MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
+            if (params != null) {
+                for (Entry<String,List<String>> param : params.entrySet()) {
+                    QName qname = new QName(param.getKey());
+                    XdmValue value = new XdmAtomicValue ( param.getValue().get(0));
+                    trans.setParameter(qname, value);
+                }
+            }
         }
         trans.transform();
         String outputXml = sw.toString();

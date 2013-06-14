@@ -6,9 +6,12 @@
 	<xsl:strip-space elements="*"/>
 
 	<!-- Maintenance note: For each revision, change the content of <recordInfo><recordOrigin> to reflect the new revision number.
-	MARC21slim2MODS3-4 (Revision 1.83) 20130118
+	MARC21slim2MODS3-4 (Revision 1.86) 20130610
 
-Revision 1.83 - Deleted mapping for 534 to note - 2013/01/18 tmee
+Revision 1.86 - Refined 653 mapping - tmee 2013/06/10
+Revision 1.85 - Fixed 245 $c - tmee 2013/03/07
+Revision 1.84 - Fixed 1.35 and 1.36 date mapping for 008 when 008/06=e,p,r,s,t so only 008/07-10 displays, rather than 008/07-14 - tmee 2013/02/01   
+Revision 1.83 - Deleted mapping for 534 to note - tmee 2013/01/18
 Revision 1.82 - Added mapping for 264 ind 0,1,2,3 to originInfo - 2013/01/15 tmee
 Revision 1.81 - Added mapping for 336$a$2, 337$a$2, 338$a$2 - 2012/12/03 tmee
 Revision 1.80 - Added 100/700 mapping for "family" - 2012/09/10 tmee
@@ -754,14 +757,13 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 
 
 
-			<!-- tmee 1.35 and 1.36 -->
+			<!-- tmee 1.35 and 1.36 and 1.84-->
 
 			<xsl:if
 				test="($controlField008-6='e' or $controlField008-6='p' or $controlField008-6='r' or $controlField008-6='s' or $controlField008-6='t') and ($leader6='d' or $leader6='f' or $leader6='p' or $leader6='t')">
 				<xsl:if test="$controlField008-7-10 and ($controlField008-7-10 != $dataField260c)">
 					<dateCreated encoding="marc">
-						<xsl:value-of select="concat($controlField008-7-10, $controlField008-11-14)"
-						/>
+						<xsl:value-of select="$controlField008-7-10"/>
 					</dateCreated>
 				</xsl:if>
 			</xsl:if>
@@ -770,9 +772,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 				test="($controlField008-6='e' or $controlField008-6='p' or $controlField008-6='r' or $controlField008-6='s' or $controlField008-6='t') and not($leader6='d' or $leader6='f' or $leader6='p' or $leader6='t')">
 				<xsl:if test="$controlField008-7-10 and ($controlField008-7-10 != $dataField260c)">
 					<dateIssued encoding="marc">
-						<xsl:value-of select="concat($controlField008-7-10, $controlField008-11-14)"
-						/>
-					</dateIssued>
+						<xsl:value-of select="$controlField008-7-10"/></dateIssued>
 				</xsl:if>
 			</xsl:if>
 
@@ -1806,7 +1806,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 		<xsl:for-each select="marc:datafield[@tag=533]">
 			<xsl:call-template name="createNoteFrom533"/>
 		</xsl:for-each>
-<!--
+		<!--
 		<xsl:for-each select="marc:datafield[@tag=534]">
 			<xsl:call-template name="createNoteFrom534"/>
 		</xsl:for-each>
@@ -2645,7 +2645,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 			</xsl:for-each>
 
 			<recordOrigin>Converted from MARCXML to MODS version 3.4 using MARC21slim2MODS3-4.xsl
-				(Revision 1.83 2013/01/18)</recordOrigin>
+				(Revision 1.86 2013/06/10)</recordOrigin>
 
 			<xsl:for-each select="marc:datafield[@tag=040]/marc:subfield[@code='b']">
 				<languageOfCataloging>
@@ -3870,7 +3870,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 			<xsl:when test="$sf06a='533'">
 				<xsl:call-template name="createNoteFrom533"/>
 			</xsl:when>
-<!--
+			<!--
 			<xsl:when test="$sf06a='534'">
 				<xsl:call-template name="createNoteFrom534"/>
 			</xsl:when>
@@ -4442,9 +4442,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 	<!-- note 245c thru 585 -->
 
 	<xsl:template name="createNoteFrom245c">
-		<xsl:choose>
-			<xsl:when
-				test="//marc:datafield[@tag='245'] and //marc:datafield[@tag=880]/marc:subfield[@code=6][contains(text(),'245')]">
+		
 				<note type="statement of responsibility">
 					<xsl:attribute name="altRepGroup">
 						<xsl:text>00</xsl:text>
@@ -4454,16 +4452,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 						<xsl:with-param name="codes">c</xsl:with-param>
 					</xsl:call-template>
 				</note>
-			</xsl:when>
-			<xsl:when test="//marc:datafield[@tag='245']/marc:subfield[@code=c]">
-				<note type="statement of responsibility">
-					<xsl:call-template name="scriptCode"/>
-					<xsl:call-template name="subfieldSelect">
-						<xsl:with-param name="codes">c</xsl:with-param>
-					</xsl:call-template>
-				</note>
-			</xsl:when>
-		</xsl:choose>
+
 	</xsl:template>
 
 	<xsl:template name="createNoteFrom362">
@@ -4616,7 +4605,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 		</note>
 	</xsl:template>
 
-<!-- tmee
+	<!-- tmee
 	<xsl:template name="createNoteFrom534">
 		<note type="original version">
 			<xsl:call-template name="xxx880"/>
@@ -5059,76 +5048,94 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 
 		<xsl:if test="@ind2=' '">
 			<subject>
+			<xsl:for-each select="marc:subfield[@code='a']">
 				<topic>
 					<xsl:value-of select="."/>
 				</topic>
+				</xsl:for-each>
 			</subject>
 		</xsl:if>
 		<xsl:if test="@ind2='0'">
 			<subject>
+				<xsl:for-each select="marc:subfield[@code='a']">
 				<topic>
 					<xsl:value-of select="."/>
 				</topic>
+				</xsl:for-each>
 			</subject>
 		</xsl:if>
-
 		<xsl:if test="@ind1='1'">
 			<subject>
+				<xsl:for-each select="marc:subfield[@code='a']">
 				<name type="personal">
 					<namePart>
 						<xsl:value-of select="."/>
 					</namePart>
 				</name>
+				</xsl:for-each>
 			</subject>
 		</xsl:if>
 		<xsl:if test="@ind1='3'">
 			<subject>
+				<xsl:for-each select="marc:subfield[@code='a']">
 				<name type="family">
 					<namePart>
 						<xsl:value-of select="."/>
 					</namePart>
 				</name>
+				</xsl:for-each>
 			</subject>
 		</xsl:if>
 		<xsl:if test="@ind2='2'">
 			<subject>
+				<xsl:for-each select="marc:subfield[@code='a']">
 				<name type="corporate">
 					<namePart>
 						<xsl:value-of select="."/>
 					</namePart>
 				</name>
+				</xsl:for-each>
 			</subject>
 		</xsl:if>
 		<xsl:if test="@ind2='3'">
 			<subject>
+				<xsl:for-each select="marc:subfield[@code='a']">
 				<name type="conference">
 					<namePart>
 						<xsl:value-of select="."/>
 					</namePart>
 				</name>
+				</xsl:for-each>
 			</subject>
 		</xsl:if>
 		<xsl:if test="@ind2=4">
 			<subject>
+				<xsl:for-each select="marc:subfield[@code='a']">
 				<temporal>
 					<xsl:value-of select="."/>
 				</temporal>
+				</xsl:for-each>
 			</subject>
 		</xsl:if>
 		<xsl:if test="@ind2=5">
 			<subject>
+				<xsl:for-each select="marc:subfield[@code='a']">
 				<geographic>
 					<xsl:value-of select="."/>
 				</geographic>
+				</xsl:for-each>
 			</subject>
 		</xsl:if>
 
 		<xsl:if test="@ind2=6">
 			<subject>
+				<xsl:for-each select="marc:subfield[@code='a']">
 				<genre>
 					<xsl:value-of select="."/>
 				</genre>
+				</xsl:for-each>
 			</subject>
+	
 		</xsl:if>
 	</xsl:template>
 
@@ -5456,4 +5463,3 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 	</xsl:template>
 
 </xsl:stylesheet>
-

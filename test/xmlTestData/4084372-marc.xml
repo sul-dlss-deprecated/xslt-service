@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record id="catkey_4084372" xmlns="http://www.loc.gov/MARC21/slim">
+    <leader>00956cpc  2200229 a 4500</leader>
+    <controlfield tag="001">a4084372</controlfield>
+    <controlfield tag="003">SIRSI</controlfield>
+    <controlfield tag="008">960814q16001850cau                 lat d</controlfield>
+    <datafield tag="040" ind1=" " ind2=" ">
+      <subfield code="a">CSt</subfield>
+      <subfield code="c">CSt</subfield>
+      <subfield code="e">dacs</subfield>
+    </datafield>
+    <datafield tag="090" ind1=" " ind2=" ">
+      <subfield code="b">M0871</subfield>
+      <subfield code="i">01/26/99 RT</subfield>
+      <subfield code="h">08/14/96 CT</subfield>
+    </datafield>
+    <datafield tag="100" ind1="1" ind2=" ">
+      <subfield code="a">Kolb, Leon,</subfield>
+      <subfield code="d">b. 1890.</subfield>
+    </datafield>
+    <datafield tag="245" ind1="1" ind2="0">
+      <subfield code="a">Leon Kolb collection of portraits :</subfield>
+      <subfield code="k">engravings, etchings, mezzotints, lithographs, and acquatints,</subfield>
+      <subfield code="f">circa 1600-1850.</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">20 linear feet (1855 items)</subfield>
+    </datafield>
+    <datafield tag="351" ind1=" " ind2=" ">
+      <subfield code="a">Arranged by name of subject, each print is numbered for convenient reference in the various indices in the printed catalogue. Painters and engravers, printing techniques and social and historical positions of the subjects are identified and indexed as well.</subfield>
+    </datafield>
+    <datafield tag="545" ind1=" " ind2=" ">
+      <subfield code="a">Dr. Kolb, Clinical Associate Professor Emeritus of Pharmacology in the Stanford School of Medicine, was a collector of books, prints, and objects d'art.</subfield>
+    </datafield>
+    <datafield tag="520" ind1=" " ind2=" ">
+      <subfield code="a">The subjects include rulers, statesmen, authors, scholars and other famous personages from ancient times to the nineteenth century. Most of the prints were produced in the 17th and 18th centuries from paintings by Hans Holbein, Anthony Vandyke, Godfrey Kneller, Peter Lely and other noted artists.</subfield>
+    </datafield>
+    <datafield tag="541" ind1=" " ind2=" ">
+      <subfield code="a">Gift of</subfield>
+      <subfield code="c">Dr. and Mrs. Leon Kolb,</subfield>
+      <subfield code="d">1972.</subfield>
+      <subfield code="e">Accessions 1972-002 and 2010-110.</subfield>
+    </datafield>
+    <datafield tag="506" ind1=" " ind2=" ">
+      <subfield code="a">Open for research; material must be requested at least 36 hours in advance of intended use.</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Accession 1972-002 has been scanned (circa 1647 items). Accession 2010-110 (208 items) is not scanned, nor was it included in the published catalog. It has been added to the finding aid.</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Published catalog available: Portraits: a catalog of the engravings, etchings, mezzotints, and lithographs presented to the Stanford University Library by Dr. and Mrs. Leon Kolb.[Stanford, Calif.] Stanford University, 1972</subfield>
+    </datafield>
+    <datafield tag="651" ind1=" " ind2="0">
+      <subfield code="a">Europe</subfield>
+      <subfield code="x">Civilization</subfield>
+      <subfield code="y">18th century.</subfield>
+    </datafield>
+    <datafield tag="651" ind1=" " ind2="0">
+      <subfield code="a">Europe</subfield>
+      <subfield code="x">History</subfield>
+      <subfield code="y">17th century.</subfield>
+    </datafield>
+    <datafield tag="655" ind1=" " ind2="7">
+      <subfield code="a">Aquatint.</subfield>
+      <subfield code="2">lcsh</subfield>
+    </datafield>
+    <datafield tag="655" ind1=" " ind2="7">
+      <subfield code="a">Engravings.</subfield>
+      <subfield code="2">ftamc</subfield>
+    </datafield>
+    <datafield tag="655" ind1=" " ind2="7">
+      <subfield code="a">Etchings.</subfield>
+      <subfield code="2">ftamc</subfield>
+    </datafield>
+    <datafield tag="655" ind1=" " ind2="7">
+      <subfield code="a">Lithographs.</subfield>
+      <subfield code="2">ftamc</subfield>
+    </datafield>
+    <datafield tag="655" ind1=" " ind2="7">
+      <subfield code="a">Mezzotint engraving.</subfield>
+      <subfield code="2">lcsh</subfield>
+    </datafield>
+    <datafield tag="852" ind1=" " ind2=" ">
+      <subfield code="a">Department of Special Collections, Stanford University Libraries, Stanford, CA 94305.</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="2">
+      <subfield code="3">Finding aid available online</subfield>
+      <subfield code="u">http://www.oac.cdlib.org/findaid/ark:/13030/ft6h4nb2mk</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">(OCoLC-M)649895282</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">(OCoLC-I)649903606</subfield>
+    </datafield>
+    <datafield tag="596" ind1=" " ind2=" ">
+      <subfield code="a">21</subfield>
+    </datafield>
+  </record>

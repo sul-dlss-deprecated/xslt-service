@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oai_dc:dc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:dc="http://purl.org/dc/elements/1.1/"
+           xmlns:srw_dc="info:srw/schema/1/dc-schema"
+           xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+           xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+   <dc:title>Leon Kolb collection of portraits : engravings, etchings, mezzotints, lithographs, and acquatints, circa 1600-1850</dc:title>
+   <dc:contributor>Kolb, Leon , b. 1890</dc:contributor>
+   <dc:type>Collection</dc:type>
+   <dc:type>Aquatint.</dc:type>
+   <dc:type>Engravings.</dc:type>
+   <dc:type>Etchings.</dc:type>
+   <dc:type>Lithographs.</dc:type>
+   <dc:type>Mezzotint engraving.</dc:type>
+   <dc:date>1600-1850</dc:date>
+   <dc:language>lat</dc:language>
+   <dc:format>20 linear feet (1855 items)</dc:format>
+   <dc:description>The subjects include rulers, statesmen, authors, scholars and other famous personages from ancient times to the nineteenth century. Most of the prints were produced in the 17th and 18th centuries from paintings by Hans Holbein, Anthony Vandyke, Godfrey Kneller, Peter Lely and other noted artists.</dc:description>
+   <dc:rights>Open for research; material must be requested at least 36 hours in advance of intended use.</dc:rights>
+   <dc:description/>
+   <dc:description>Accession 1972-002 has been scanned (circa 1647 items). Accession 2010-110 (208 items) is not scanned, nor was it included in the published catalog. It has been added to the finding aid.</dc:description>
+   <dc:description>Published catalog available: Portraits: a catalog of the engravings, etchings, mezzotints, and lithographs presented to the Stanford University Library by Dr. and Mrs. Leon Kolb.[Stanford, Calif.] Stanford University, 1972</dc:description>
+   <dc:description>Gift of Dr. and Mrs. Leon Kolb, 1972. Accessions 1972-002 and 2010-110.</dc:description>
+   <dc:description>Dr. Kolb, Clinical Associate Professor Emeritus of Pharmacology in the Stanford School of Medicine, was a collector of books, prints, and objects d'art.</dc:description>
+   <dc:subject>Civilization</dc:subject>
+   <dc:coverage>Europe</dc:coverage>
+   <dc:coverage>18th century</dc:coverage>
+   <dc:subject>History</dc:subject>
+   <dc:coverage>Europe</dc:coverage>
+   <dc:coverage>17th century</dc:coverage>
+
+   <dc:relation>http://www.oac.cdlib.org/findaid/ark:/13030/ft6h4nb2mk</dc:relation>
+
+</oai_dc:dc>
