@@ -48,16 +48,10 @@ public class XsltResource {
 	//	* If log4j is not present, and the JDK is 1.4+, uses Java's own logging implementation
 	private static final Log LOG = LogFactory.getLog( XsltResource.class );
 
-	private static String xsltUrlPrefix = "http://localhost/xslt/xslt_files/" ;
-    private static String xsltFilePrefix = System.getProperty("user.dir") + "/webapps/xslt/WEB-INF/xslt_files/";
+    private static String xsltFilePrefix = System.getProperty("xslt.home.dir") + "/xslt_files/";
 	
-    public static void setTestXsltPrefixes(String prefix){
-        if(prefix == null){
-            xsltUrlPrefix = "http://localhost:9998/context/xslt_files/";
-        }else{
-            xsltUrlPrefix = prefix + "/xslt_files/";
-        }
-        xsltFilePrefix = System.getProperty("user.dir") + "/WebContent/WEB-INF/xslt_files/";
+    public static void setTestMode(String mode){
+        xsltFilePrefix = System.getProperty("user.dir") + "/xslt_files/";
     }
 
     private static String xsltURL(String xsltname) {

@@ -66,56 +66,17 @@
 		
 	</target>
 	
-	<!--War building targets -->
-	
 	<target name="build-jar">
-
 		<mkdir dir="${dist.dir}"/>
-		
 		<jar jarfile="${weblib.dir}/${name}.jar" compress="true">
 			<fileset dir="${build.dir}">
 				<include name="**/*"/>
 			</fileset>
 		</jar>
-	
 	</target>
-		
-	<!-- only need one war at the moment -->
-	<!--
-	<target name="dev-war" if="create-wars" >
-		<echo message="Writing dev properties" />
-		<copy file="${props.dir}/dev-marc2xml.conf" tofile="${war.dir}/WEB-INF/marc2xml.conf" overwrite="true" />
-		
-		<war warfile="${dist.dir}/${name}-dev.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
-			<include name="*"/>
-			<include name="WEB-INF/*.*"/>
-			<exclude name="WEB-INF/web.xml"/>
-			<include name="WEB-INF/lib/**"/>
-			<include name="WEB-INF/classes/**"/>
-			<include name="META-INF/*"/>
-			<exclude name="**/.*"/>
-		</war>
-	</target>
-	-->
-	<!--
-	<target name="test-war" if="create-wars" >
-		<echo message="Writing test properties" />
-		<copy file="${props.dir}/test-marc2xml.conf" tofile="${war.dir}/WEB-INF/marc2xml.conf" overwrite="true" />
-		
-		<war warfile="${dist.dir}/${name}-test.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
-			<include name="*"/>
-			<include name="WEB-INF/*.*"/>
-			<exclude name="WEB-INF/web.xml"/>
-			<include name="WEB-INF/lib/**"/>
-			<include name="WEB-INF/classes/**"/>
-			<include name="META-INF/*"/>
-			<exclude name="**/.*"/>
-		</war>
-	</target>
-    -->
-	
-	<target name="prod-war" if="create-wars" >		
-		<war warfile="${dist.dir}/${name}-prod-${version}.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
+
+	<target name="build-war" >
+		<war warfile="${dist.dir}/${name}-${version}.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
 			<include name="*"/>
 			<include name="WEB-INF/*.*"/>
 			<exclude name="WEB-INF/web.xml"/>
@@ -126,12 +87,9 @@
 			<exclude name="**/.*"/>
 		</war>
 	</target>
-	
-	<target name="build-wars" depends="prod-war" />
-		
-	<!--Target for hudson
-	    create-wars should be passed in as a property to the ant script to build all oracle wars-->
-	<target name="warfiles" depends="clean,build,tests,build-jar,build-wars" description="Build the web application archive">
+
+	<!--Target for hudson -->
+	<target name="warfiles" depends="clean,build,tests,build-jar,build-war" description="Build the web application archive">
 		<delete file="${weblib.dir}/${name}.jar" />
 	</target>
 	

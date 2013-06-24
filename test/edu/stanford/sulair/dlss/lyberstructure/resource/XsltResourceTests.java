@@ -29,7 +29,7 @@ public class XsltResourceTests extends AbstractHttpServerTester {
 
     @Before
     public void setup(){
-        XsltResource.setTestXsltPrefixes(getUri().build().toString());
+        XsltResource.setTestMode("dev");
     }
 
     @Test
