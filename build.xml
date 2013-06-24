@@ -186,6 +186,6 @@
         <cobertura-report format="html" destdir="${cobertura.coverage.dir}" srcdir="${src.dir}" />
     </target>
 
-	<target name="all" depends="clean,build,tests,cobertura-test" />
+	<target name="all" depends="clean,build,tests,warfiles,cobertura-test" />
 
 </project>
