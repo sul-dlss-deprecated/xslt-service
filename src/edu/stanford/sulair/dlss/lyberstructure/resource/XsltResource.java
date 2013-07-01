@@ -1,10 +1,8 @@
 package edu.stanford.sulair.dlss.lyberstructure.resource;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,10 +25,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.TransformerException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 import java.io.*;
 
@@ -39,7 +34,11 @@ import edu.stanford.sulair.dlss.lyberstructure.*;
 
 @Path("/")
 public class XsltResource {
-	@Context
+
+    @Context
+    ServletContext context; 
+
+    @Context
 	UriInfo uriInfo;
 	
 	//Commons Logging has a default LogFactory which follows these steps to get a Log implementation:
@@ -68,9 +67,27 @@ public class XsltResource {
         return new String(buffer);
     }
 
+    @Path("version")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getVersion()  {
+        try {
+            String manifestPath = null;
+            manifestPath = context.getRealPath("/") + "META-INF/MANIFEST.MF";
+            String manifest = new Scanner(new File(manifestPath)).useDelimiter("\\Z").next();
+            LOG.info("returning implementation version info");
+            return Response.status(200).entity(manifest).build();
+        } catch (Exception e) {
+            // Handle any errors
+            LOG.error(e);
+            e.printStackTrace();
+            return ResourceUtilities.createErrorResponse(e);
+        }
+    }
+
     @Path("xsltfile/{xsltname}")
     @GET
-    @Produces("application/xml")
+    @Produces(MediaType.APPLICATION_XML)
     public Response getXsltFile(@PathParam("xsltname") String xsltname) {
         String xsl = null;
 		try {
@@ -85,16 +102,16 @@ public class XsltResource {
 
     @Path("transform/{xsltname}")
     @POST
-    @Consumes("application/xml")
-    @Produces("application/xml")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
     public Response doTransform(@PathParam("xsltname") String xsltname, String input) {
         return transformResponse(xsltname, input, null);
     }
 
 	@Path("marc2mods")
 	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
 	public Response doMarc2ModsTransform(@Context UriInfo uriInfo, String marcxml) {
         String mods = uriInfo.getQueryParameters().getFirst("mods");
         String xslt = uriInfo.getQueryParameters().getFirst("xslt");
@@ -120,8 +137,8 @@ public class XsltResource {
 	
 	@Path("dor_marc2mods")
 	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
     @Deprecated
 	public Response doDorMarc2ModsTransform(@Context UriInfo uriInfo, String marcxml) {
         String xsltname = "DOR_MARC2MODS3-3";
@@ -130,8 +147,8 @@ public class XsltResource {
 
 	@Path("mods2dc")
 	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
 	public Response doMods2DcTransform(String modsxml) {
         String mods = uriInfo.getQueryParameters().getFirst("mods");
         String xslt = uriInfo.getQueryParameters().getFirst("xslt");
@@ -153,8 +170,8 @@ public class XsltResource {
 
 	@Path("dor_mods2dc")
 	@POST
-	@Consumes("application/xml")
-	@Produces("application/xml")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
     @Deprecated
 	public Response doDorMods2DcTransform(@Context UriInfo uriInfo, String mods) {
         String xsltname = "DOR_MODS3_DC";

@@ -76,6 +76,9 @@
 	</target>
 
 	<target name="build-war" >
+        <tstamp>
+            <format property="build.timestamp" pattern="yyyy-MM-dd HH:mm:ss" />
+        </tstamp>
 		<war warfile="${dist.dir}/${name}-${version}.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
 			<include name="*"/>
 			<include name="WEB-INF/*.*"/>
@@ -85,6 +88,12 @@
             <include name="WEB-INF/xslt_files/**"/>
 			<include name="META-INF/*"/>
 			<exclude name="**/.*"/>
+            <manifest>
+                <attribute name="Implementation-Version" value="${version}"/>
+                <attribute name="Implementation-Vendor" value="Stanford University Libraries"/>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Build-Timestamp" value="${build.timestamp}"/>
+            </manifest>            
 		</war>
 	</target>
 
